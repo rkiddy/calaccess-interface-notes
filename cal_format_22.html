@@ -1,0 +1,3816 @@
+</html><head><title>CAL format 2.20</title></head>
+<body>
+<h2 align="center">
+California File .CAL Layouts<br/>
+Document Id: CAL format 2.20 <br/>
+Date: 07/01/2016
+</h2>
+
+<pre>
+TABLE OF CONTENTS
+
+Overview
+List of Campaign Forms Available for Electronic Filing
+List of Lobbyist Forms Available for Electronic Filing
+HDR (Header Record) Layout
+Notes about Special Fields (ie. Dates, Amount, Percent Rates)
+Entity Codes
+Lobbying Activity Description (CVR & LPAY)
+Office Codes
+Special CAL-ACCESS Codes & Expense Codes
+Amendments to Forms
+Amendment Processing of Items in Schedules
+Text Record Info & Layout
+Back-Referencing to Related Parent/Child Records info
+Split Transaction Record (Child Record for Per Elec To Date)
+Section 1 - Campaign Disclosure Reports
+Section 2 - Campaign Statements (Org, Term, etc.)
+Section 3 - Lobbyist Disclosure Reports
+Section 4 - Lobbyist Statements (Org, Term, etc.)
+</pre>
+
+<pre>
+***********************
+*OVERVIEW * 
+***********************
+</pre>
+<p>
+In accordance with the requirements of SB 49, the Secretary of State (SOS) is required to define a standardized record format or formats for transmission by the filing community of data required to be filed electronically under SB 49. The SOS will accept test files from vendors to ensure compliance and compatibility with these formats, and publish a list of the certified vendors or other parties who have successfully filed test reports with us.
+</p><p>
+This document contains the design definition of the California Electronic Filing Format for the electronic filing of California campaign and lobbying disclosure documents. This format defines the order and contents of the electronic filing data files that will be accepted and processed by the State of California's (CAL-ACCESS) California Automated Lobbying And Campaign Contribution & Expenditure Search System. This filing format has been developed to meet the specific requirements of SB 49 to implement electronic filing of these documents and to disclose this data to the public over the Internet. The specific layout of the format is derived from the data requirements of the forms themselves and experience gained implementing this system in the past two years. Vendor feedback is welcome and has been solicited.
+</p><p>
+This filing format is being used as the basis for the design of the CAL-ACCESS system and will be used to receive filings from filing software that uses the ".CAL" format. Like all software development integration efforts of this type, it is anticipated that minor problems will be found with the format. Please submit problem reports related to any potential problems to the Political Reform Division at (916) 653-6224.
+</p><p>
+The filing format is in the public domain and is non-proprietary. There are no intellectual property limitations associated with the filing format. The format is administered by the Secretary of State and all changes or corrections to the format will be managed by the Secretary of State.
+</p>
+
+<pre>
+Proposed filing formats are provided for the following forms:
+
+ CAMPAIGN
+
+400 Statement of Organization (Slate Mailer Organization)
+401 Slate Mailer Organization Campaign Statement
+402 Statement of T ermination (Slate Mailer Organization)
+410 Statement of Organization Recipient Committee
+425 Semi-Annual Statement of no Activity
+450 Recipient Committee Campaign Disclosure Statement - Short Form
+460 Recipient Committee Campaign Statement
+461 Independent Expenditure Committee & Major Donor Committee Campaign Statement
+465 Supplemental Independent Expenditure Report
+470 Officeholder and Candidate Campaign Statement - Short Form
+470S Officer and Candidate Campaign Statement (Supplement)
+495 Supplemental Pre-Election Campaign Statement
+496 Late Independent Expenditure Report
+497 Late Contribution Report
+498 Slate Mailer Late Payment Report
+
+LOBBYIST
+
+601 Lobbying Firm Registration Statement
+602 Lobbying Firm Activity Authorization
+603 Lobbyist Employer or Lobbying Coalition Registration Statement
+604 Lobbyist Certification Statement
+605 Amendment to Registration, Lobbying Firm, Lobbyist Employer, Lobbying Coalition
+606 Notice of Termination
+607 Notice of Withdrawal
+615 Lobbyist Report
+625 Report of Lobbying Firm
+630 Payments Made to Lobbying Coalitions (Attachment to Form 625 or 635)
+635 Report of Lobbyist Employer or Report of Lobbying Coalition
+635C Payments Received by Lobbying Coalitions
+640 Governmental Agencies Reporting (Attachment to Form 635 or Form 645)
+645 Report of Person Spending $5,000 or More
+690 Amendment to Lobbying Disclosure Report
+</pre>
+
+<pre>
+ ------ [HDR] ------
+</pre>
+<p>
+The first record in a CAL file must be a short CSV (comma-separated-value) record identified with the text "HDR" in the first field and "CAL" in the second field. The rest of the fields contain information such as version numbers and software identification for the filing database program that created the electronic CAL filing. The layout of a HDR record is described on the next page.
+</p><p>
+The filing database program is responsible for creating the various record types described in this document. It will assemble them into a single (.CAL) file with a HDR record, immediately followed by a CVR (Cover) record, followed by a number of other record types (e.g. CVR2, CVR3, SMRY, RCPT, EXPN,...) as required by a particular type of filing. The specific record types that should be included after the HDR and CVR records of each type of filing (e.g. F460 F615, F625, F635,) are listed at the beginning of each of the four Filing Sections later in this document.
+</p><p>
+Note:  The following layouts use 'Rx', 'R', 'Cx' & 'C' to indicate if a field is (R)equired or (C)onditionally required. If required {or conditionally required} and data is missing, the 'x' indicates whether this results in a filing being "Rejected" by the agency.
+</p><p>
+'Rx' = (R)equired field; SOS "Rejects" filing  (Level-8)<br/>
+'R' = (R)equired field, but SOS "Accepts" filing (Level-4)<br/>
+'Cx' = (C)ond Required field; SOS "Rejects" filing  (Level-8)<br/>
+'C' = (C)ond Required field, but SOS "Accepts" filing (Level-4)<br/>
+'O' = (O)ptional field. Code is used within this document so that programs which 'read' this document can use a simple and consistent approach for parsing the text.
+</p>
+
+<p>
+Header Record Layout (common to all CAL filing types)
+
+<table cellpadding="5">
+<tr><th>#</th>}<th>R{x}<br/>C{x}</th><th>Field Name</th><th>Max Len</th><th>Description</th></tr>
+<tr><td>01</td><td>Rx</td><td>Rec_Type</td><td>3</td><td>Record Type. Value: HDR</td></tr>
+<tr><td>02</td><td>Rx</td><td>EF_Type</td><td>3</td><td>Electronic Filing Type (a.k.a. Form_Type)</td></tr>
+<tr><td>03</td><td>Rx</td><td>State_Cd</td><td>2</td><td>State Code. Value: CA</td></tr>
+<tr><td>04</td><td>Rx</td><td>CAL_Ver</td><td>4</td><td>CAL Version #. Value: 2.01</td></tr>
+<tr><td>05</td><td>Rx</td><td>Soft_Name</td><td>90</td><td>Filer Software Name</td></tr>
+<tr><td>06</td><td>Rx</td><td>Soft_Ver</td><td>16</td><td>Filer Software Version #</td></tr>
+<tr><td>07</td><td>O</td><td>HDRcomment</td><td>200</td><td>Optional comment (only used for development/testing)</td></tr>
+</table>
+</p>
+
+ NOTES ABOUT CERTAIN FIELD TYPES
+E.F (.CAL) files are not case sensitive. Rec_Type, Form_Type and all "code" fields (e.g. Entity_Cd, Yes/No fields, Check-box fields), can have values represented in any mix of UPPERCASE or lowercase letters." It is important that software that generates "CAL" files prevents any fields from containing "leading spaces" (e.g. " Text information" has a leading space before the word Text). Fields with leading spaces are not allowed.
+Each kind of record must be coded with the exact number of field delimiters necessary to define the number of fields as specified by this document. The number of fields required on CVR and CVR2 records depends on the Form_Type. All other records have field counts, which vary with the value of Rec_Type.
+DATES
+All 8 byte date fields must be in CCYYMMDD format. Dates are always coded as 8-digit fields in Century, Year, Month, & Day order.
+AMOUNTS
+Monetary amounts are stored with an "explicit" decimal point, which when coded, must be followed by 1 or 2 (but no more than 2) decimal positions. Embedded commas are not allowed and cause a filing to be rejected. Negative amounts can be represented with a leading hyphen (-) character.
+   Examples:
+123.45 - 345 - -567.8 - $1,234.00 -
+1234.00- -
+represents an amount of $123.45
+represents an amount of $345.00
+represents a negative amount of $567.80
+invalid & will be rejected (commas & other symbols not allowed)
+invalid & will be rejected (no trailing '-' signs allowed)
+Page 6 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ RATES & PERCENTS
+Rates & Percents are expressed as "freeform" text. When a Loan is expressed in terms of a "rate", the value should be represented with an explicit decimal point (e.g. 0.056). If the same "rate" is expressed as a percentage, the % symbol should be used. A rate of 0.056 would be expressed as 5.6%. Percents/Rates are carried in "CAL" files in fields of up to 30-characters.
+NAMES
+Names are carried in 4 explicitly defined fields:
+1) Last Name is a 200-character field, which is used for a person's last name or is used for the complete name of a non-person entity such as a committee, business, ballot measurer name, etc.
+2) First name is a 45-character field which is used to store a person's first name and any middle name(s) and/or initials. For a person, it's all the names excepting the Last Name or surname.
+A Moniker may be included in the first name field. It can be identified
+with surrounding single-quote (') characters. It must not be surrounded
+with double-quote (") characters, because embedded double-quotes (") are
+not allowed within text fields in the CAL format. When displayed or
+printed in CAL-ACCESS, the single-quote characters are shown as double-quotes.
+3) Title (or prefix) is used for titles used by a person such as Mr, Mrs, Ms, Hon, Rep, Sen, Dr, and so on. Up to 10 characters are allowed.
+4) Suffix is used for a person's suffix such as Jr, Sr, II, III, Esquire, etc. As many as 10 characters are allowed.
+  Page 7 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ADDRESSES
+Addresses must contain a postal "delivery line" (such as a street address or a PO Box), plus city, state code and a 5-digit (or optionally a Zip+4) ZIP Code. In other words, a complete "mailing address" should be given as an "address".
+"CAL" records allow for 2 lines of address (in addition to the fields for city, state code and ZIP Code). When only one line of street address is given, it should be a postal delivery line and should be coded in the Address1 field (Address2 field should be blank). When two lines of address are given, the postal delivery line should be coded in Address2 (Address1 will contain "non-delivery" information such as a building name, "attention:" etc.).
+Zip Codes & Zip +4
+Zip Codes are defined as a maximum of 10 characters. Zip Codes can be stored as 5- digit, 9-digit, or as 5-digit/hyphen/4-digit values.
+PHONE NUMBERS
+Phone numbers are coded "freeform" in a 20-character phone field. Any special instructions (e.g. select #3 from the menu) and/or extension numbers should be included in phone number fields.
+YES/NO BOX PAIRS
+Yes/No Boxes are represented on forms and schedules as two separate boxes. They are mutually exclusive in their use; however, if a filer checks both boxes in a Yes/No group, this should be interpreted the same as if neither box is checked. The results are stored in a single field in the electronic file - the only acceptable values in a Yes/No field are blank, "Y" and "N".
+    Page 8 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ SINGLE CHECK-BOXES
+Check-box fields differ from Yes/No Boxes. Check-boxes reflect either a "positive" response (i.e. the filer has put a check-mark, an "X" or some other kind of marking in the box), or "no response". The lack of a mark in a check-box means only that a "positive" response HAS NOT been made. It does not indicate a "negative" response - the filer might have ignored the check-box on the form.
+In electronic filing, check-box fields are coded with an "X" to indicate that the item on the form was "checked". Nothing is coded when the item was not "checked".
+CHECK-BOXES GROUPS
+Forms often have groups of check-boxes where only one box can be checked. These are called "mutually exclusive" check-box groups. The convention used in "CAL" files is to define a single field to represent a group of mutually exclusive check-boxes on a paper form. Code values are defined to represent each possible selection
+(e.g. [1|2|3|...] or [A|B|C|...]).
+Note: The convention in MS Windows is to offer mutually exclusive choices with what are called "radio buttons".
+Note: The convention in "CAL" is to define a separate field for each check-box, which is not part of a mutually exclusive group. (see Single Check-boxes above).
+ENTITY CODES USED ON FORMS & SCHEDULES
+The following Entity Codes are used to indicate various kinds of persons and committees on "Cover Page" (CVR) record types:
+   CAO - CTL - RCP - SMO - BMC - MDI -
+Candidate/Office-holder (F460, F465, F470, F496, F497, F470S) Controlled Committee (F460, F465, F496, F497, F410, F495)
+Recipient Committee (F425, F450, F460, F465, F496, F497, F410, F495) Slate Mailer Organization (F401, F498, F400, F402)
+Ballot Measure Committee (F450, F460, F465, F496, F497, F410, F495) Major Donor/Ind Expenditure (F461, F465, F496, F497)
+Page 9 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ENTITY CODES USED ON FORMS & SCHEDULES (continued)
+ LBY - FRM - LEM - LCO - IND -
+Lobbyist (an individual) (F606, F607, F615, F645) Lobbying Firm (F601, F602, F603, F625, F645) Lobbying Employer (F601, F602, F603, F635, F645) Lobbying Coalition (F601, F602, F603, F635, F645) Person (spending > $5000) (F645)
+The following "Entity Codes" are used to indicate various kinds of persons on "Additional Name/Address" CVR2 record types:
+AGY - ATH - ATR - BNM - CAO - COM - CTL - EMP - FRM - MBR - OFF - OWN - POF - PRO - PTN - RCP - SCL - SPO -
+State Agency (F603)
+Authorizing Individual (F400)
+Assistant Treasurer (F410, F425, F450, F460)
+Ballot Measure's Name/Title (F410, F460-Part5a)
+Cand/Officeholder (F410, F460-Part4a, F460-Part5b, F460-Part6, F465) Committee (F400, F460-Part4b, F470-Part4)
+Controlled Committee (F410, F460-Part4b, F470-Part4)
+Employer (F625, F635, F603)
+Lobbying Firm (F603)
+Member of Association (F602)
+Officer (F465-Part5, F625, F635)
+Owner (F625, F635)
+Principal Officer (F400, F410, F465)
+Proponent (F410, F460-Part5b)
+Partner (F625, F635)
+Recipient Committee (F400, F460-Part4b, F470-Part4)
+Subcontracted Client (F602)
+Sponsor (F410)
+Note:
+F460 Part4a/Part4b & Part5a/Part5b refer to the "upper"/"lower" portions of Parts 4 and 5 located on the 460's second cover page.
+The following CVR2 "Item Codes" indicate which Section within F400 & F410 reports the Entity is to be listed:
+ATR - POF - CTL - PFC - SPO - SMA -
+(Item_Cd) Assistant Treasurer (F410)
+(Item_Cd) Principal Officer (F400, F410)
+(Item_Cd) Controlled Committee (F410)
+(Item_Cd) Primarily Formed Committee Item (F410) (Item_Cd) Sponsored Committee Itemization (F410) (Item_Cd) Slate Mailer Authorizer (F400)
+Page 10 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ENTITY CODES USED ON FORMS & SCHEDULES (continued)
+The following Entity Codes are used to indicate various kinds of persons on "verification" CVR3 record types:
+ TRE - CAO - OFF - PRO - SPO -
+Treasurer/Assistant Treasure Candidate/Office Holder Officer (Responsible) Proponent
+Sponsor
+The following Entity Codes are used to indicate various kinds of persons and organizations on various schedules including RCPT, EXPN, and LOAN record types:
+COM - RCP - IND - OTH - PTY - SCC -
+Committee
+Recipient Committee Individual
+Other
+Political Party
+Small Contributor Committee
+LOBBYING ACTIVITY DESCRIPTION (Lby_Actvty on Lobbyist CVR & LPAY records)
+If additional space is needed to describe this activity, attach a text memo record describing the activity to the filing. When reporting lobbying activity, the preferred format to identify bills is the type of bill followed by the bill number. Each bill is separated by a space character or comma. Putting a white space between the bill type and bill number is optional. Formatting the information in this manner provides the public with better access to bill information. The following variations comply with this definition.
+AB26 AB30, SB300, SB 285 AB 325,SB203, AB 25
+The codes recognized by the system are AB, AC, ACA, ACR, AJR, HR, SB, SCA, SCR, SJR, and SR. In addition, any of these codes followed by an X and a single digit (for example ABx7 or ABx 7) will be recognized.
+  Page 11 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ OFFICE CODES USED ON FORMS & SCHEDULES Statewide Offices
+  GOV - LTG - SOS - CON - ATT - TRE - INS - SUP - SPM -
+Governor
+Lieutenant Governor
+Secretary of State
+State Controller
+Attorney General
+State Treasurer
+Insurance Commissioner Superintendent of Public Instruction Supreme Court Justice
+State District Offices
+ SEN - ASM - BOE - PER - APP -
+State Senator
+State Assembly Person
+Board of Equalization Member
+Public Employees Retirement System State Appellate Court Justice
+City, County and Local Offices
+ ASR - BED - BSU - CAT - CCB - CCM - COU - CSU - CTR - DAT - MAY - PDR - PLN - SHC - SCJ - TRS -
+Assessor
+Board of Education
+Board of Supervisors
+City Attorney
+Community College Board City Council Member County Counsel
+County Supervisor
+Local Controller
+District Attorney
+Mayor
+Public Defender
+Planning Commissioner Sheriff-Coroner
+Superior Court Judge Local Treasurer
+Miscellaneous / Other
+OTH - Other
+ Page 12 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ PAYMENT PURPOSE CODES USED FOR “Payments to Influence” schedules
+The following codes are used in detail records reported on Form 640. The codes are to be included as part of the first six (6) characters of the [RECIP_NAML] field as described on page 82 of this document. Complete definitions of the codes are contained in the California Code of Regulations, Section 18616, amended January 21, 2016. The brief descriptions of the codes are as follows:
+S – Salary and compensation of employees other than lobbyists
+E – Expenses incurred by a lobbyist and paid directly by the filer
+L – Legislative related services performed by a lobbying firm
+C – Consultants and governmental relations...other than a lobbying firm P – Public affairs
+A – Advertising including billboards, print, radio, television, text, email, and other electronic advertising
+R – Research including feasibility studies, analysis, polling, and public opinion V – Lobbying events including planning, rentals, equipment, and transportation O – All other payments not covered by one of the above-listed categories
+EXPENSE CODES USED ON 460 EXPENSE SCHEDULES
+These 3-character codes have been described by the FPPC for use on F460 / Schedules E, F and G. CALACCESS uses these codes universally on other forms & schedules when Expense Amounts require categorization. ----------------------------------------------------------------------------------
+                 CMP - CNS - CTB - CVC - FIL - FND - IND - LEG - LIT - MBR - MTG - OFC - PET - PHO -
+campaign paraphernalia/miscellaneous campaign consultants
+contribution (if nonmonetary, explain)* civic donations
+candidate filing/ballot fees
+fundraising events
+independent expenditure supporting/opposing others (explain)* legal defense
+campaign literature and mailings
+member communications
+meetings and appearances
+office expenses
+petition circulating
+phone banks
+Page 13 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ POL - POS - PRO - PRT - RAD - RFD - SAL - TEL - TRC - TRS - TSF - VOT - WEB -
+polling and survey research
+postage, delivery and messenger services
+professional services (legal, accounting)
+print ads
+radio airtime and production costs
+returned contributions
+campaign workers salaries
+T.V. or cable airtime and production costs
+candidate travel, lodging and meals
+staff/spouse travel, lodging and meals
+transfer between committees of the same candidate/sponsor voter registration
+information technology costs (Internet, e-mail)
+Note: For Schedule D "Type of payment", codes "MON, "IKD" and "IND are the only valid codes. IKD and IND require an explanation.
+Page 14 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ CALACCESS Expense Codes which are not explicitly listed on FPPC forms.
+ MON -
+IKD -
+LON -
+Monetary contribution - this code means that the contribution is specifically a monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
+Non-monetary contribution - this code means that the contribution is specifically a non-monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
+Loan - This is a "generic" code meaning that a F461P5 contribution is a Loan. Other Codes used on F461P5 are 'MON', 'CTB' & 'IND'.
+AMENDMENTS TO FORMS
+ When a filing is received, the CALACCESS system assigns a unique identifier known as the Filing Id. This filing id is printed on the acknowledgement notification that is emailed to you. The id is always preceded by "CA-" (i.e. CA-999999). You will need to use this filing id when amending this form. The id must be entered at the time of uploading your file to our system using the CALOAD utility. This id is entered in the area titled:
+This filing amends filing id: Along with sending us this id through the CALOAD utility, you need to increase the number in the field "Report_Num" found in every CVR record. This number must be increased according to what amendment number you are sending (i.e. 001 = first amendment, 002 = second amendment).
+Note: Your file will be rejected under the following conditions:
+• You failed to provided a Filing Id, and Report_Num is greater than zero.
+• You send the Report_Num out of sequence. (i.e. Report_Num = 003, but we have
+not received 002 yet, or Report_Num = 002, and we already have 002 on file)
+Please view AMENDMENT PROCESSING OF ITEMS IN SCHEDULES found in the next page for additional amendment information.
+ Page 15 of 95
+999999
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ AMENDMENT PROCESSING OF ITEMS IN SCHEDULES
+Tran_ID: A unique identifier permanently associated with each itemization or transaction appearing in a CAL electronic file. If a given itemization appears in more than one schedule (e.g. a forgiven loan is reported on both Schedule A and Schedule B) then the Tran_ID associated with that itemization can either have the same value or different values for that single item among the various schedules. However, all Tran_IDs of itemizations appearing in any amending report must match the Tran_IDs first used for those same itemizations in the original report.
+The Tran_ID assigned and maintained by the filer's software is used by the California SOS's database to uniquely identify each itemization from every schedule and from every filer. It is critically important that when a filer amends a previously filed electronic report, the Tran_IDs of the subsequent amendment match those already reported. It is acceptable for a Tran_ID of one original report to be assigned a value that was used on a previous original report. Tran_IDs must be unique WITHIN a report group - that is an original report and all of its amendments.
+Although software will assign a Tran_ID to a dollar itemization on almost all schedules, this is not so with the 460's Schedule F. "Schedule" F is a series of summarization's - the main entries are summarization's for a payee/creditor. Therefore Tran_IDs on Schedule F will be unique identifiers used for the payee/creditor entity. Sub- itemizations on Schedule F that show new incurred expenses for the reporting period will, however, be assigned Tran_IDs for the individual incurred expense items.
+A unique Tran_ID must also be assigned to each CVR2 and CVR3 record. Since these are not "money" records, the Tran_ID will be a unique identifier that is assigned to the Entity who/which is coded in each CVR2 and CVR3 record.
+MEMOS, NOTES & EXPLANATORY TEXT
+Large bodies of text can be associated with forms and also with individual itemizations within schedules. A special TEXT record can be used in a CAL file to carry descriptive text as a string of characters not exceeding 4000 characters.
+TEXT records can be associated with a filing's "cover" page, with a schedule as a whole, and to one or more individual itemizations within a schedule.
+The contents of TEXT records are printed on "pages" following the form(s) to which they are related. For example, a body of TEXT related to a cover form will be shown following that form. Likewise, TEXT related to a schedule (as a whole and/or itemizations within that schedule) is printed on pages after the last detailed itemization of the particular schedule. Depending on the amount of "white space" available on a form, the print rendering software in CALACCESS will attempt to "fit" short text memos
+  Page 16 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ within the immediate proximity of the item to which the memo is attached, otherwise it is printed on separate "pages".
+CAL layouts for Schedules include a field named Memo_RefNo. This is a value assigned by the filer and is printed within the itemization area of the printed schedule as a "reference" to the memo text that is printed after the last detailed itemization in the schedule. Memo_RefNo can be thought of as being like a footnote reference.
+The layout of the TEXT record is described below:
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 O
+04 R
+Field Name ----------------
+Rec_Type Form_Type
+Ref_No T ext4000
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: TEXT
+8 Contains 'Form_Type' of a "cover" Form (F4**, F6**) or a Schedule (e.g. A,B1,C,E, ...) to which this text/memo/note is related.
+Values: (F4**, F6**, any schedule name)
+20 The value contained in a schedule itemization's 'Memo_RefNo' field.
+4000 A string of unformatted text up to 4000 characters.
+Note: no tab, carriage return, line feed or any other non-printable characters may be embedded within the string of text.
+Examples:
+TEXT,F460,,"Some general notes about this 460 filing are given here." TEXT,A,,"Some general notes about Schedule A in this 460 filing." TEXT,C,123,"A long memo for an item in Schedule C that references Memo 123."
+Page 17 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ BACK-REFERENCING TO RELATE "CHILD" SUBITEMIZATIONS BACK TO "PARENT" ITEMIZATIONS
+Schedules that can have child records have a new BakRef_TID field are:
+  Disclosure Report
+401 Slate Mailer Camp Stmt: 460 Campaign Statement: 460 Campaign Statement: 460 Campaign Statement: 460 Campaign Statement:
+Report/Schedule
+401/B
+460/A; 460/C; 460/I 460/D; 460/E; 460/G 460/B1; 460/B2; 460/H 460/F
+Rec Type
+S401 RCPT EXPN LOAN DEBT
+   BACK-REFRENCING TO RELATE "CHILD" SUBITEMIZATIONS BACK TO "PARENT" ITEMIZATIONS (Cont.)
+  Lobbyist Activity Expenses
+Lobbyist Payments Received: Lobbyist Payments Made: Lobbyist Pol Contribs Made:
+615/P1; 625/P3-A; LEXP 635/P3-C; 645/P2
+625/P2 LPAY 635/P3-B LPAY 615/P2; 625/P4-B; LCCM 635/P4-B; 645/P3-B
+The BakRef_TID of a "sub-itemization" (a "child" record in programmer talk) is used to "refer back" to the main itemization record in a schedule. A sub-itemization (like a "memo" record where Memo_Code=X) does not count toward any schedule or summary page dollar totals. It is an informational record.
+A non-blank BakRef_TID both indicates that a record is a "child" record, and also points (refers back) to the main itemization or "parent" record. The value that is coded into the BakRef_TID of a child record is that of the Tran_ID belonging to the parent record.
+The CALACCESS system maintains references so that entities listed in "sub- itemizations" can be located in queries of the CALACCESS database.
+The 460 Schedule G is a special case where ALL entries on that form are really sub- itemizations for items that appear on the 460's Schedule E or Schedule F. Filers have the option of coding Schedule E/F sub-itemizations within Schedules E/F themselves, or separately on Schedule G. CALACCESS will maintain references from child records on Schedule G back to the parent records on Schedule E/F by using Schedule G's BakRef_TIDs (which are required on Sched G). A field called G_From_E_F on the EXPN layout is used for Schedule G "child" records to indicate whether the "parent" record is found on Schedule E or Schedule F.
+Page 18 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Programmers should note that "parent" records on the F460's Schedule F are assigned Tran_IDs that are unique for the Payee/Creditor or are unique for the "debt". However, "child" sub-itemizations of new incurred expenses and new payments are assigned Tran_ID's unique to the incurred item. The values in BakRef_TID's in Schedule F need to take this into account.
+Child Records:
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 R
+06 R
+Field Name ----------------
+Rec_Type Pform_Type
+Ptran_Id Elec_Date Elec_Amount Elec_Code
+SPLIT TRANSACTION RECORD
+Max
+Len Description
+----- ----------------------------------------------------------
+6 Record Type Value: SPLT
+6 Parent Schedule Type.
+Values: A, B1, B2, C, D, H, F450P5.
+20 Parent Tran_ID.
+8 Date of Election
+12 Per Election to Date Amount
+2 Per Election to Date Code. Values: P, G, S, R. (P = Primary, G = General, S = Special, R = Runoff)
+Note: A parent RCPT Record could have one or many SPLT records. Here is a little sample of some ways the child split record may be used:
+1 to many
+RCPT -------------------------> SPLT
+Record Samples RCPT,A,MC5, etc...... (Parent) SPLT,A,MC5, etc...... (Child) SPLT,A,MC5, etc...... (Child)
+Page 19 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ *******************************************************************************
+Section 1 - Campaign Disclosure Reports
+*******************************************************************************
+401 Slate Mailer Organization Campaign Statement
+425 Semi-Annual Statement of no Activity
+450 Recipient Committee Campaign Disclosure Statement - Short Form
+460 Recipient Committee Campaign Statement
+461 Independent Expenditure Committee and Major Donor Committee
+Campaign Statement
+465 Supplemental Independent Expenditure Report
+470 Officeholder and Candidate Campaign Statement - Short Form
+495 Supplemental Pre-Election Campaign Statement
+496 Late Independent Expenditure Report
+497 Late Contribution Report
+498 Slate Mailer Late Payment Report
+*******************************************************************************
+ RecType
+Electronic File Components by Filing Type
+FormName Description
+   HDR CAL CVR F401 CVR3 F401 SMRY F401 RCPT F401A S401 F401B S401 F401B-1 S401 F401C S401 F401D
+HDR CAL CVR F425
+CVR2 F425
+CVR3 F425
+"CAL" Header record
+Cover Page; Slate Mailer Organization
+Cover Page; Part IV; Verification Information
+Summary Page & Misc. Schedule Line-item [sub]totals Payments Received
+Payments Made
+Payments Made by Agent/Contractor on Behalf of SMO "F400" Persons in SMO Receiving $1000 or more Candidates/Measurers not on Schedule F401A
+"CAL" Header record
+Cover Page; Semi Annual Statement of No Activity Cover Page; Part 1; Assistant Treasurer
+Cover Page; Part 3; Verification Information
+Page 20 of 95
+
+Document Id: CAL
+format 2.20 Date: 07/01/2016
+ HDR CAL CVR F450
+CVR2 F450
+CVR3 F450
+F495 F450 SMRY F450 EXPN F450P5
+SPLT Child
+HDR CAL CVR F460
+CVR2 F460
+CVR3 F460
+F495 F460 SMRY F460 RCPT A LOAN B1 LOAN B2 RCPT C EXPN D EXPN E DEBT F EXPN G LOAN H RCPT I SPLT Child
+RecType FormName
+HDR CAL CVR F461 CVR3 F461 F405 F461 SMRY F461 EXPN F461P5
+"CAL" Header record
+Cover Page; Recipient Committee
+Cover Page; Part 3; Assistant Treasurer
+Cover Page; Verification Information
+Supplemental Pre-Election Statement (a.k.a. Form 495) Summary Page & Misc. Schedule Line-item [sub]totals Expenditures & Contributions Made
+Split Transaction Record - Used as a child record for schedules: A, B1, B2, C, D, H and/or F450P5 when disclosing Per Election to Date information.
+"CAL" Header record
+Cover Page; Recipient Committee Campaign Statement Cover Page; Additional Committees, Asst. Treasurer, etc. Cover Page; Part 4; Verification Information
+Supplemental Pre-Election Statement (a.k.a. Form 495) Summary Page & Misc. Schedule Line-item [sub]totals Schedule A Monetary Contributions Received
+Schedule B Part 1 - Loans Received
+Schedule B Part 2 - Loan Guarantors
+Schedule C - Nonmonetary Contributions Received Schedule D - Summary of Expenditures - Support/Oppose... Schedule E - Payments Made
+Schedule F - Accrued Expenses (Unpaid Bills)
+Schedule G - Payments Made "on behalf" of this Committee Schedule H - Loans Made to Others
+Schedule I - Miscellaneous Increases to Cash
+Split Transaction Record - Used as a child record for schedules: A, B1, B2, C, D, H and/or F450P5 when disclosing Per Election to Date information.
+Description
+"CAL" Header record
+Cover Page; Ind Expenditure & Major Donor Committee Cover Page; Part 4; Verification Information Amendment Information sheet (a.k.a. Form 405) Summary Page & Misc. Schedule Line-item [sub]totals Expenditures & Contributions Made
+   Page 21 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ HDR CAL CVR F465
+CVR2 F465
+CVR3 F465
+SMRY F465 EXPN F465P3
+HDR CAL CVR F470
+CVR2 F470
+CVR3 F470
+HDR CAL CVR F496 S496 F496 RCPT F496P3
+HDR CAL CVR F497 S497 F497P1 S497 F497P2
+HDR CAL CVR F498 S498 F498-R S498 F498-A
+"CAL" Header record
+Cover Page; Supplemental Independent Expenditure Rpt Cover Page; Part V Filing Officer Titles & Addresses Cover Page; Part VII; Verification Information
+Summary Page & Misc. Schedule Line-item [sub]totals Independent Expenditures Made
+"CAL" Header record
+Cover Page; Officeholder/Cand Short Form & Supplement Cover Page; Part IV; Committee Names & Addresses Cover Page; Part V; Verification Information
+"CAL" Header record
+Cover Page; Late Independent Expenditure Report Independent Expenditures Made
+Contributions of $100 or More Received
+"CAL" Header record
+Cover Page; Late Contribution Report Late Contributions Received
+Late Contributions Made
+"CAL" Header record
+Cover Page; Slate Mailer Late Payments Report Late Payments Received From:
+Late Payments Attributed To:
+Page 22 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F401, F450, F460, F461 DISCLOSURE REPORTS
+F425 STATEMENT OF NO ACTIVITY
+F465 SUPPLEMENTAL INDEPENDEDNT EXPENDITURE F496, F497, F498 LATE CONTRIB/EXPEND REPORTS
+=================================================================
+  # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 O
+Field Name Len ---------------- ----- Rec_Type 3 Form_Type 4
+Filer_ID 9 Entity_Cd 3
+Description ---------------------------------------------------------- Record Type Value: CVR
+Type of Filing or Form set.
+Values: F401; F425; F450; F460; F461; F465; F496; F497; F498
+Committee ID number of Filer
+Values:
+CAO - Candidate/Office-holder (F460, F465, F496, F497)
+CTL - Controlled Committee (F460, F465, F496, F497)
+RCP - Recipient Committee (F460, F425, F450, F465, F496, F497)
+SMO - Slate Mailer Organization (F401, F498) BMC - Ballot Measure Committee (F460, F450,
+F465, F496, F497)
+MDI - Major Donor/Ind Expenditure (F461,
+F465, F496, F497)
+Filer's Last name
+Filer's First name(s) (Required for persons) Filer's Prefix or Title
+Filer's Suffix
+Report Number - Values:
+000 - Original Report
+001-999 - Amended Rpt #1-#999
+Date this report is filed
+05 Rx
+06 C
+07 O
+08 O
+09 Rx
+10 Rx
+Filer_NamL 200 Filer_NamF 45 Filer_NamT 10 Filer_NamS 10
+Report_Num 3 Rpt_Date 8
+R{x} Max
+Page 23 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ # C{x} --- ---- 11 Cx
+Field Name Len ---------------- ----- Stmt_Type 2
+Description ---------------------------------------------------------- Type of Statement - Values:
+PE = Pre-Election (F450, F460)
+SE = Supplemental Pre-elect (F450,
+F460, F495)
+SY = Special Odd-Yr. Campaign (F450, F460) SA = Semi-annual (F450, F460)
+TS = Termination Statement (F450, F460)
+QT = Quarterly Stmt (F450,F460)
+S1 = Semi-Annual (Jan1-Jun30) (F425)
+S2 = Semi-Annual (Jul1-Dec31) (F425)
+(Null value {not Req.} on F461, F401, F465, F496, F498, F497)
+Identifying Report Number on a Late Ctrib/Payment Rpt or an Ind Exp Report (Req. on F465, F496, F497 & F498). (This user assigned value is printed in the Report No. and Amended Report No. fields on 496 & 497 forms and is printed on electronic versions of 465 & 498 forms.)
+Reporting Period From Date (not Req. on F496, 497, 498)
+Reporting Period Through Date (not Req. on F496, 497, 498)
+Date of the Election (Req. on F450, F460, F461, F465)
+Street 1 of Filing Entity
+Street 2 of Filing Entity
+City of Filing Entity
+State of Filing Entity
+ZIP+4 of Filing Entity
+Phone Number of Filing Entity FAX Phone
+Email
+12 Cx
+13 Cx
+14 Cx
+15 C
+16 R
+17 O
+18 R
+19 R
+20 R
+21 O
+22 O
+23 O
+Rpt_ID_Num 30
+From_Date 8 Thru_Date 8 Elect_Date 8
+Filer_Adr1 55 Filer_Adr2 55 Filer_City 30 Filer_ST 2 Filer_ZIP4 10 Filer_Phon 20 Filer_FAX 20 File_Email 60
+COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued)
+ R{x} Max
+Page 24 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued)
+ R{x} # C{x}
+--- ----
+24 O
+25 O
+26 C
+27 C
+28 C
+Field Name ---------------- Mail_Adr1 Mail_Adr2 Mail_City Mail_ST Mail_ZIP4
+Max
+Len Description
+----- ---------------------------------------------------------- 55 Street 1 Mailing Address of Filer (if different) 55 Street 2 Mailing Address of Filer (if different) 30 City Mailing Address of Filer (if different)
+2 State Mailing Address of Filer (if different) 10 ZIP+4 Mailing Address of Filer (if different)
+F496 & F497 filings)
+(Tres. fields #29 - 40 not used on
+29 C 30 C 31 O
+32 O 33 C 34 O 35 C 36 C 37 C 38 O 39 O 40 O
+41 C
+Tres_NamL Tres_NamF 45 Tres_NamT 10
+Tres_NamS 10 Tres_Adr1 55 Tres_Adr2 55 Tres_City 30 Tres_ST 2 Tres_ZIP4 10 Tres_Phon 20 Tres_FAX 20 Tres_Email 60
+Cmtte_Type 1
+Treasurer or Responsible Officer's Last name Treasurer or Responsible Officer's First name Treasurer or Responsible Officer's Prefix or Title
+Treasurer or Responsible Officer's Suffix Treasurer or Responsible Officer Street 1 Treasurer or Responsible Officer Street 2 Treasurer or Responsible Officer City Treasurer or Responsible Officer State Treasurer or Responsible Officer ZIP+4 Treasurer or Responsible Officer Phone FAX Phone
+Email Address
+Type of Recipient Committee (Req on F450 & F460)
+Value: C = Cand/Officeholder Controlled Cmtte [460]
+P = Cand/Officeholder Primarily Formed [450|460]
+B = Ballot Measure Committee [450|460] G = General Purpose Committee [450|460]
+200
+Note: Fields 42 through 45 are not used when Cmtte_Type = P (Please leave null)
+Page 25 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued)
+------ Following fields used when Form_Type = F460 and Cmtte_Type = C ------
+42 C Flag1_YN 1 State Candidate Elec Committee? Value: "Y" or "N"
+43 C Flag2_YN 1 Recall Indicator? Value: "Y" or "N"
+Note Field 44 & 45 are not used when Cmtte_Type = C, please leave null
+------ Following fields used when Form_Type = F460 or F450 and Cmtte_Type = B -----
+ 42 C
+43 C
+44 C
+45 C
+------ Following fields used when Form_Type = F460 or F450 and Cmtte_Type = G -----
+42 C
+43 C
+44 C
+45 C
+R{x}
+# C{x}
+--- ----
+46 C
+47 O
+48 O
+Flag1_YN Flag2_YN Flag3_YN Flag4_YN
+Field Name ---------------- AmendExp_1 AmendExp_2 AmendExp_3
+1 Sponsored? Value: "Y" or "N"
+1 Small Contributor Committee? Value: "Y" or "N"
+1 Political Party/Central Committee? Value: "Y" or "N"
+1 Not used when Cmtte_Type = G
+Max
+Len Description
+----- ---------------------------------------------------------- 100 Amendment Explanation line 1
+100 Amendment Explanation line 2
+100 Amendment Explanation line 3
+(Req if Report_Num > 0, and Form_Type = F460, F496, or F497)
+Flag1_YN Flag2_YN Flag3_YN Flag4_YN
+1 Primarily Formed Committee? Value: "Y" or "N"
+1 Controlled Committee? Value: "Y" or "N"
+1 Sponsored? Value: "Y" or "N"
+1 Not used when Cmtte_Type = B
+Page 26 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued) COVER PAGE LAYOUT FOR DISCLOSURE REPORTS - VARIABLE PORTIONS
+Note: Remainder of CVR record starting with Field #49 is parsed depending on the value contained Form_Type.
+Note: Forms F425, F450, F497 & F498 do not use variable part of CVR layout. ------ Following variable fields used when Form_Type=F401 -------------------
+  # C{x} --- ----
+49 O
+50 C
+51 C
+52 C
+53 C
+Field Name Len ---------------- ----- Rpt_Att_CB 1 Cmtte_ID 9
+ReportName 3 RptFromDt 8 RptThruDt 8
+Description ---------------------------------------------------------- Committee Report "Attached" check-box Committee ID (Filer_ID) of Recipient Committee
+Campaign Disclosure Statement - Value: [450|460|461]
+Campaign Disclosure Statement - Period From Date
+Campaign Disclosure Statement - Period Through Date
+R{x} Max
+Page 27 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued)
+------ Following variable fields used when Form_Type=F461 -------------------
+ R{x} # C{x}
+--- ----
+49 O
+50 C
+51 C
+52 O
+53 C
+54 C
+55 C
+56 C
+57 O
+58 C
+59 O
+60 C
+61 O
+62 C
+Field Name ---------------- EmplBus_CB Bus_Name Bus_Adr1 Bus_Adr2 Bus_City Bus_ST Bus_ZIP4 Bus_Inter BusAct_CB BusActvity Assoc_CB Assoc_Int Other_CB Other_Int
+Max
+Len Description
+----- ----------------------------------------------------------
+1 Employer/Business info included check-box 200 Name of Employer/Business
+55 Employer/Business Street 1
+55 Employer/Business Street 2
+30 Employer/Business City
+2 Employer/Business State
+10 Employer/Business ZIP+4
+40 Employer/Business Interests
+1 Business Activity info included check-box
+90 Business Activity description
+1 Association Interests info included check-box 90 Association Interests description
+1 Other Entity Interests info included check-box 90 Other Entity Interests description
+------ Following variable fields used when Form_Type =[F460|465|496] -----
+# C{x} --- ----
+49 R
+50 R
+51 O
+52 O
+53 R
+54 O
+55 R
+56 R
+57 R
+58 O
+59 O
+60 O
+Field Name Len ---------------- ----- Cand_NamL 200 Cand_NamF 45 Cand_NamT 10 Cand_NamS 10 Cand_Adr1 55 Cand_Adr2 55 Cand_City 30 Cand_ST 2 Cand_ZIP4 10 Cand_Phon 20 Cand_FAX 20
+Cand_Email 60
+Description ---------------------------------------------------------- Candidate/Officeholder's Last name Candidate/Officeholder's First name Candidate/Officeholder's Prefix or Title Candidate/Officeholder's Suffix Candidate/Officeholder Street 1 Candidate/Officeholder Street 2 Candidate/Officeholder City Candidate/Officeholder State Candidate/Officeholder ZIP+4 Candidate/Officeholder Phone
+FAX Phone Number {not mapped to present FPPC forms}
+Email Address {not mapped to present FPPC forms}
+R{x} Max
+Page 28 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR DISCLOSURE REPORTS (Continued)
+ R{x} # C{x}
+--- ----
+61 C
+62 C
+63 C
+64 C
+65 C
+66 C
+67 C
+68 C
+69 O
+70 R
+Field Name ---------------- Bal_Name Bal_Num Bal_Juris Office_Cd Offic_Dscr
+Juris_Cd
+Juris_Dscr Dist_No
+Off_S_H_Cd Sup_Opp_Cd
+Max
+Len Description
+----- ---------------------------------------------------------- 200 Ballot Measure Name
+3 Ballot Number or Letter
+40 Jurisdiction of Ballot Measure
+3 Office Sought (See table of code in Overview) 40 Office Sought Description (Req. if
+Office_Cd=OTH)
+3 Office Jurisdiction Code Values:
+STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District;
+CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+40 Office Jurisdiction Description
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]
+3 Office District Number (Req. if Juris_Cd = [SEN|ASM|BOE]
+1 Office Sought/Held Code: H=Held; S=Sought 1 Support/Oppose? Values: S; O
+Note: Additional Cover Page information is found in the CVR2 and CVR3 records. Please refer to these records for additional instructions.
+Page 29 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F470 OFFICEHOLDER/CAND SHORT/SUPPLEMENT
+  # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 O
+05 Rx
+06 R
+07 O
+08 O
+09 Rx
+10 Rx
+11 R
+12 O
+13 R
+14 R
+15 R
+16 O
+17 O
+18 O
+19 R
+20 C
+21 R
+Field Name Len ---------------- ----- Rec_Type 3
+Form_Type 4 Filer_ID 9 Entity_Cd 3
+Filer_NamL 200 Filer_NamF 45 Filer_NamT 10 Filer_NamS 10
+Report_Num 3
+Rpt_Date 8
+Cand_Adr1 55 Cand_Adr2 55 Cand_City 30 Cand_ST 2 Cand_ZIP4 10 Cand_Phon 20 Cand_FAX 20
+Cand_Email 60
+Office_Cd 3 Offic_Dscr 40
+Juris_Cd 3
+Description ---------------------------------------------------------- Record Type Value: CVR
+Type of Filing or Form set. Value: F470 Committee ID number of Filer
+Values: CAO - Candidate/Office-holder
+Filer's Last name
+Filer's First name(s) (Required for persons) Filer's Prefix or Title
+Filer's Suffix
+Report Number - Values: 000 - Original Report 001-999 - Amended Rpt #1-#999
+Date this report is filed
+Street 1 of Filing Candidate/Officeholder Street 2 of Filing Candidate/Officeholder City of Filing Candidate/Officeholder
+State of Filing Candidate/Officeholder ZIP+4 of Filing Candidate/Officeholder Phone of Filing Candidate/Officeholder
+FAX Phone Number {not mapped to present FPPC forms}
+Email Address {not mapped to present FPPC forms}
+Office Sought (See table of code in Overview) Office Sought Description (Req. if Office_Cd=OTH)
+Office Jurisdiction Code Values:
+STW = Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District;
+CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+R{x} Max
+Page 30 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F470 OFFICEHOLDER/CAND SHORT/SUPPLEMENT (Continue)
+  R{x} # C{x}
+--- ----
+22 C
+23 C
+24 O
+25 C
+26 O
+Field Name ----------------
+Juris_Dscr Dist_No Off_S_H_Cd Elect_Date
+Date_1000
+Max
+Len Description
+----- ----------------------------------------------------------
+40 Office Jurisdiction Descrip
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]
+3 Office District Number (Req. if Juris_Cd = [SEN|ASM|BOE]
+1 Office Sought/Held Code: H=Held; S=Sought
+8 Date of the General Election (Req. in even years)
+8 Date Contribs Totaling 1,000 or more Received
+Code F470/Part-4 Name/Addr info for Related Committees on CVR2 records with CVR2.Entity_Cd=['COM'|'CTL'|'RCP'].
+Page 31 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE - {{2} ADDITIONAL NAMES/COMMITTEES SECTION} RECORD LAYOUT
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ----------------
+Rec_Type Form_Type
+Tran_ID
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: CVR2
+4 Form_Type (must equal Form_Type in CVR
+record)
+Values: F425; F450; F460; F465; F470; {F400; F410 - See Section 2};
+{F625; F635 - See Section 3};
+{F601; F602; F603 - See Section 4}
+20 Transaction ID - permanent value unique to this item
+Note: Remainder of CVR2 record is parsed depending on value of Form_Type. See Section 2 for CVR2 layouts used with F400 & F410 filings.
+See Section 3 for CVR2 layouts used with F625 & F635 filings.
+See Section 4 for CVR2 layouts used with F601, F602 & F603 filings.
+Code F425/Part-1 & F450/Part-3 Name/Address info for Assistant Treasurer on CVR2 records with CVR2.Entity_Cd='ATR'.
+Code F460 Name/Addr info for Assistant Treasurer on CVR2 records with CVR2.Entity_Cd='ATR' and CVR2.F460_Part='3'.
+Code ADDITIONAL F460/Part-5a Officeholder/Candidate info on CVR2 records with CVR2.Entity_Cd='CAO' and CVR2.F460_Part='5a'.
+Code F460/Part-5b Name/Addr info for Related Committees on CVR2 records with CVR2.Entity_Cd=['COM'|'CTL'|'RCP'] and CVR2.F460_Part='5b'.
+Code ADDITIONAL F460/Part-6a Ballot Measure info on CVR2 records with CVR2.Entity_Cd='BNM' and CVR2.F460_Part='6a'.
+Code F460/Part-6b Officeholder/Candidate/Proponent info on CVR2 records with CVR2.Entity_Cd=['CAO'|'PRO'] and CVR2.F460_Part='6b'.
+Code F460/Part-7 Name/Addr info for Candidate/Officeholder on CVR2 records with CVR2.Entity_Cd='CAO' and CVR2.F460_Part='7'.
+Code F465/Part-5 Name/Addr info for Filing Officers on CVR2 records with CVR2.Entity_Cd='OFF'.
+Page 32 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ------ Following variable F465 {Part V} fields used when Form_Type=F465 ------
+R{x} # C{x}
+--- ----
+04 O
+05 R
+06 R
+07 O
+08 R
+09 R
+10 R
+Field Name ----------------
+Entity_Cd
+Title Mail_Adr1 Mail_Adr2 Mail_City Mail_ST Mail_ZIP4
+Max
+Len Description
+----- ----------------------------------------------------------
+3 Values:
+CAO - Candidate/Officeholder POF - Principal (filing) officer
+90 Official Title of Filing Officer 55 Address
+55 Optional 2nd line of Address 30 City
+2 State code 10 Zip+4
+------ Following fields used for F425 Part/1; F450 Part/3; F460 (Parts 3, 5a,
+------ 5b, 6a, 6b & 7) and F470/Part IV when Form_Type=[F425|F450|F460|F470].
+R{x} Max
+# C{x} Field Name Len Description
+--- ---- ---------------- -----
+----------------------------------------------------------
+04 Rx Entity_Cd
+3 Values:
+ATR - Assistant Treasurer (F425-P1, F450-P3, F460-P3)
+CAO - Cand/Officeholder (F460-P5a*, F460- P6b, F460-P7)
+COM - Committee (F460-P5b & F470-P4)
+CTL - Controlled Cmtte (F460-P5b & F470-P4) RCP - Recipient Cmtte (F460-P5b & F470-P4) PRO - Proponent (F460-P6b)
+BNM - Ballot Measure (F460-P6a*)
+* Note:CVR2 record(s) used for ADDITIONAL entries on F460 Part-5a and F460 Part-6a (if any).
+05 Cx F460_Part 2 Part of 460 cover page coded on this CVR2 record. Values: 3, 5a, 5b, 6a, 6b, or 7.
+(Req on F460 filings) Note: 5a/5b & 6a/6b are "top/bottom" of Parts 5 & 6
+06 C Cmte_ID 9 Committee ID (Req. when Entity_Cd = [COM|CTL|RCP)
+Page 33 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE - {{2} ADDITIONAL NAMES/COMMITTEES SECTION} RECORD LAYOUT
+  # C{x} --- ----
+07 R
+08 C
+09 O
+10 O
+11 C
+12 O
+13 C
+14 C
+15 C
+16 O
+17 O
+18 O
+19 C
+20 C
+21 O
+22 O
+23 C
+24 C
+25 C
+26 C
+27 C
+28 C
+Field Name Len ---------------- -----
+Enty_NamL 200
+Enty_NamF 45
+Enty_NamT 10 Enty_NamS 10 Enty_Adr1 55 Enty_Adr2 55 Enty_City 30 Enty_ST 2 Enty_ZIP4 10 Enty_Phon 20 Enty_FAX 20
+Enty_Email 60
+Tres_NamL 200 Tres_NamF 45 Tres_NamT 10 Tres_NamS 10 Control_YN 1
+Office_Cd 3 Offic_Dscr 40
+Juris_Cd 3
+Juris_Dscr 40 Dist_No 3
+Description ----------------------------------------------------------
+Entity [Last] Name (Committee, Candidate, etc.)
+Entity's First name (Req. when Entity_Cd = CAO)
+Entity's Prefix or Title
+Entity's Suffix
+Street 1 of Filing Committee
+Street 2 of Filing Committee
+City of Filing Committee
+State of Filing Committee
+ZIP+4 of Filing Committee
+Phone of Filing Committee
+FAX Phone Number {not mapped to present FPPC forms}
+Email Address {not mapped to present FPPC forms}
+Treasurer's Last name
+Treasurer's First name
+Treasurer's Prefix or Title
+Treasurer's Suffix
+Controlled Committee? Yes/No
+F460/P4)
+Office Sought (See table of code in Overview) Office Sought Description
+(Req. if Office_Cd = OTH)
+Office Jurisdiction Code
+STW=Statewide;
+SEN=Senate District;
+ASM=Assembly District;
+BOE=Board of Equalization District;
+CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+Office Jurisdiction Descrip
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]
+Office District Number (Req. if Juris_Cd = [SEN|ASM|BOE]
+R{x} Max
+Page 34 of 95
+(Req. on
+Values:
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE - {{2} ADDITIONAL NAMES/COMMITTEES SECTION} RECORD LAYOUT
+  R{x} # C{x}
+--- ----
+29 C
+30 C
+31 C
+32 C
+33 C
+Field Name ----------------
+Off_S_H_Cd Bal_Name Bal_Num Bal_Juris Sup_Opp_Cd
+Max
+Len Description
+----- ----------------------------------------------------------
+1 Office Sought/Held Code: H=Held; S=Sought 200 Ballot Measure Name
+7 Ballot Number or Letter
+40 Jurisdiction
+1 Support/Oppose? Values: S; O
+# C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 Rx
+05 R
+06 O
+07 R
+08 R
+09 O
+10 O
+Field Name Len ---------------- ----- Rec_Type 4
+Form_Type 4
+Tran_ID 20 Entity_Cd 3
+Sig_Date 8 Sig_Loc 45
+Sig_NamL 200 Sig_NamF 45 Sig_NamT 10 Sig_NamS 10
+Description ---------------------------------------------------------- Record Type Value: CVR3
+Form_Type
+(must equal Form_Type in CVR record) Values: F401; F425; F450; F460; F461; F465; F470.
+Transaction ID - permanent value unique to this item
+Values: TRE - Treasurer
+ATR - Assistant Treasurer
+CAO - Candidate/Office-holder
+OFF - Officer (Responsible)
+PRO - Proponent (F460 - Bal Measure Cmtte) SPO - Sponsor (F460 - Gen Purpose Cmtte)
+Date when signed
+City and State where signed
+Signer's "as signed" Last name Signer's "as signed" First name Signer's "as signed" Prefix or Title Signer's "as signed" Suffix
+COVER PAGE (VERIFICATION INFORMATION) RECORD LAYOUT
+ R{x} Max
+Page 35 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ Page 36 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ CONTRIBUTION INFORMATION (a.k.a.. Form 495; Part II)
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 R
+04 Rx
+05 Rx
+R{x}
+# C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 O
+05 O
+06 O
+07 O
+Field Name ---------------- Rec_Type
+Form_Type
+Elect_Date
+ElectJuris ContribAmt
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: F495
+4 Form_Type (must equal Form_Type in CVR record)
+Values: F450; F460
+8 Date of the Election (same as on CVR rec)
+40 Jurisdiction of the Election
+12 Contribution Amount (6mos prior - 17days before)
+Field Name ---------------- Rec_Type Form_Type Line_Item Amount_A
+Amount_B Amount_C
+Elec_Dt
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: SMRY
+8 Name of Filing Form or Schedule Name
+8 Line Number of Summary T otal
+12 Summary Amount - (Column A on some forms,
+and Total to Date when Line_Item = 22A thru
+22Z)
+12 Summary Amount - Column B 12 Summary Amount - Column C
+(Column C Not Used in F460) 8 Date of Election
+SUMMARY TOTALS RECORD LAYOUT
+ Note: Amount(s) may have a null or zero value if there is no dollar total to be conveyed. SMRY records with null/zero Amount(s) do not have to be coded within a filing. Amount(s) are assumed to be zero in the absence of a SMRY record. Please leave ExpLimt_Line and Elec_Dt null when not applicable. (Trailing Commas are not required).
+Page 37 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Examples:
+F460 SMRY records (when needed) are coded with these Form_Type/Line# values:
+ SMRY line
+SMRY,F460,1,Amt_A,Amt_B, SMRY,F460,12,Amt_A SMRY,F460,20,Amt_A,Amt_B SMRY,F460,22A,Amt_A,,,Elec_Dt SMRY,A,1,Amt_A SMRY,B1,1,Amt_A SMRY,C,1,Amt_A SMRY,D,1,Amt_A SMRY,E,1,Amt_A SMRY,F,1,Amt_A SMRY,H,1,Amt_A SMRY,I,1,Amt_A
+through
+
+
+
+
+
+
+
+
+
+
+
+
+SMRY line
+SMRY,F460,11,Amt_A,Amt_B SMRY,F460,19,Amt_A SMRY,F460,21,Amt_A,Amt_B SMRY,F460,22Z,Amt_A,,,Elec_Dt SMRY,A,3,Amt_A SMRY,B1,3,Amt_A SMRY,C,3,Amt_A SMRY,D,3,Amt_A SMRY,E,4,Amt_A SMRY,F,3,Amt_A SMRY,H,3,Amt_A SMRY,I,4,Amt_A
+with these Form_Type/Line# values:
+SMRY line
+   F450 SMRY records (when needed) are coded
+SMRY line through
+   SMRY,F450,1,Amt_A  SMRY,F450,15,Amt_A
+F461 SMRY records (when needed) are coded with these Form_Type/Line# values:
+SMRY line through SMRY line
+SMRY,F461,1,Amt_A  SMRY,F461,5,Amt_A
+   Page 38 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016 F465 SMRY records (when needed) are coded with these Form_Type/Line# values:
+SMRY line through SMRY line
+SMRY,F465,1,Amt_A  SMRY,F465,3,Amt_A
+F401 SMRY records (when needed) are coded with these Form_Type/Line# values:
+    SMRY line
+SMRY,F401,1,Amt_A,Amt_B SMRY,401A,1,Amt_A SMRY,401B,1,Amt_A
+SMRY,401B-1,0,Amt_A
+through SMRY line
+ SMRY,F401,2,Amt_A,Amt_B  SMRY,401A,3,Amt_A
+ SMRY,401B,3,Amt_A
+{B-1 has no line#, code a '0' (zero)}
+   R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 C
+06 C
+Field Name ---------------- Rec_Type
+Form_Type
+Tran_ID Entity_Cd
+Ctrib_NamL Ctrib_NamF
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: RCPT
+6 Sched Name: A = Sched A / Monetary; C = Sched C / Non-monetary;
+I = Sched I / Misc. to Cash;
+F401A = Payments Received
+F496P3 = Contributions of $100 or More Received
+20 Transaction ID - permanent value unique to this item
+3 Values: [COM|RCP] - Recipient Committee IND - Individual;
+OTH - Other (e.g. a Bus, Cmtte, Org, ...) PTY - Political Party; (F496P3 & F460)
+SCC - Small Contributor Committee (F496P3 & F460)
+200 Contributor's Last name
+45 Contributor's First name
+RECEIPTS SCHEDULES (A, C, I, and F401A)
+ RECEIPTS SCHEDULES (A, C, I, and F401A) (Continue)
+ Page 39 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+07 O
+08 O
+09 C
+10 O
+11 C
+12 C
+13 C
+14 C
+15 C
+16 O
+17 O
+Field Name ----------------
+Ctrib_NamT Ctrib_NamS Ctrib_Adr1 Ctrib_Adr2 Ctrib_City Ctrib_ST Ctrib_ZIP4
+Ctrib_Emp Ctrib_Occ Ctrib_Self Tran_Type
+Max
+Len Description
+----- ---------------------------------------
+10 Contributor's Prefix or Title 10 Contributor's Suffix
+55 Address of Contributor
+55 Optional 2nd line of Address 30 City
+2 State code 10 Zip+4
+200 Employer (Sched A, C - Req. if Entity = 'IND') 60 Occupation (Sched A, C - Req. if Entity = 'IND') 1 Check Box: Self Employed?
+1 Transaction Type - Values:
+F = Forgiven Loan;
+I = Intermediary;
+R = Returned (Negative Amount?); T = Third Party Repayment;
+X = Transfer
+When Tran_Type = X
+Max
+Len Description
+----- --------------------------------------- 8 Date of Transfer
+8 Original Date of Contribution
+All other Tran_Type's
+Max
+Len Description
+----- ---------------------------------------
+8 Date item Received (or Begin date of date range)
+8 End-date of date range for Items received
+12 Amount (Monetary/Inkind/Promise) Received
+ R{x} # C{x}
+--- ----
+18 R
+19 R
+R{x}
+# C{x}
+--- ----
+18 R
+19 O
+20 R
+Field Name ---------------- Trans_Date
+Contr_Date
+Field Name ----------------
+Rcpt_Date
+Date_Thru Amount
+ RECEIPTS SCHEDULES (A, C, I, and F401A) (Continue)
+ Page 40 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+21 C
+22 C
+23 C
+24 C
+25 C
+26 C
+27 O
+28 O
+29 C
+30 O
+31 C
+32 C
+33 C
+Field Name ----------------
+Cum_YTD
+Hold_Amount Ctrib_Dscr
+Cmte_ID
+Tres_NamL Tres_NamF
+Tres_NamT Tres_NamS Tres_Adr1
+Tres_Adr2 Tres_City Tres_ST Tres_ZIP4
+Max
+Len Description
+----- ---------------------------------------
+12 Cumulative YTD Amount (Sched A, 401A)
+12 (Not used at this time)
+90 Description of Goods/Services Rcvd.
+(Sched C, I)
+9 Committee ID
+(If [COM|RCP] & no ID#, Treas info Req.)
+200 Treasurer's Last name
+(Req if [COM|RCP] & no ID#)
+45 Treasurer's First name
+(Req if [COM|RCP] & no ID#)
+10 Treasurer's Prefix or Title 10 Treasurer's Suffix
+55 Treasurer Street 1
+(Req if [COM|RCP] & no ID#)
+55 Treasurer Street 2 30 Treasurer City
+2 Treasurer State 10 Treasurer Phone
+------ Intermediary fields (Intr_NamL - Intr_Self) do not apply to F401A
+34 O 35 O 36 O 37 O 38 C 39 O 40 C 41 C 42 C 43 C 44 C 45 O
+Intr_NamL Intr_NamF Intr_NamT Intr_NamS Intr_Adr1 Intr_Adr2 Intr_City Intr_ST Intr_ZIP4 Intr_Emp Intr_Occ Intr_Self
+200 Intermediary's/Transfer Last name 45 Intermediary's/Transfer First name 10 Intermediary's/Transfer Prefix or Title 10 Intermediary's/Transfer Suffix
+55 Intermediary/Transfer Street 1 55 Intermediary/Transfer Street 2 30 Intermediary/Transfer City
+2 Intermediary/Transfer State 10 Intermediary/Transfer ZIP+4 200 Employer (Sched A, C)
+60 Occupation (Sched A, C)
+1 Check Box: Self Employed?
+RECEIPTS SCHEDULES (A, C, I, and F401A) (Continue)
+ Page 41 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+Field Name ----------------
+Max
+Len Description
+----- ---------------------------------------
+------ Fields 46 - 59 used on F401A --------------------------------------
+46 C
+47 C
+48 O
+49 O
+50 C
+51 C
+52 C
+Cand_NamL 200 Cand_NamF 45 Cand_NamT 10 Cand_NamS 10 Office_Cd 3 Offic_Dscr 40
+Juris_Cd 3
+Candidate's Last name Candidate's First name Candidate's Prefix or Title Candidate's Suffix
+Office Sought (See table of code in Overview) Office Sought Description
+(Req. if Office_Cd=OTH)
+53 C
+54 C
+55 O
+56 O
+57 O
+58 O
+59 C
+60 O
+61 O
+62 O
+63 O
+64 O
+Juris_Dscr 40
+Dist_No 3
+Off_S_H_Cd 1 Bal_Name 200 Bal_Num 7 Bal_Juris 40 Sup_Opp_Cd 1
+Memo_Code 1 Memo_RefNo 20 BakRef_TID 20
+XRef_SchNm 2 XRef_Match 1
+Office Jurisdiction Code STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District; CIT=City;
+CTY=County; LOC=Local; OTH=Other
+Office Jurisdiction Descrip
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]
+Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE]
+Office Sought/Held Code: H=Held; S=Sought Ballot Measure Name
+Ballot Number or Letter
+Jurisdiction
+Support/Oppose? Values: S; O (F401)
+Memo Amount
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Back Reference to a Tran_ID of a "parent" record
+Related item is included on Sched 'B2' or 'F' X = Related item on other Sched has same
+Page 42 of 95
+Values:
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ 65 C Int_Rate 6
+66 Cx Int_CmteId 9
+Tran_ID
+Loan Interest Rate (F496P3 Only)
+Committee Id for Transfer or Intermediary (Required when Tran_Type = X)
+Note: To disclose the Per Election to Date information, please refer to the "SPLT" record found in this document.
+Page 43 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ EXPENDITURE SCHEDULES (D, E, G, F450P5, F461P5, F465P3)
+ # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 C
+06 C
+07 O
+08 O
+09 C
+10 O
+11 C
+12 C
+13 C
+14 C
+15 R
+16 C
+17 C
+18 O
+Field Name Len ---------------- -----
+Rec_Type 4 Form_Type 6
+Tran_ID 20 Entity_Cd 3
+Payee_NamL 200 Payee_NamF 45 Payee_NamT 10 Payee_NamS 10 Payee_Adr1 55 Payee_Adr2 55 Payee_City 30 Payee_ST 2 Payee_ZIP4 10
+Expn_Date 8
+Amount 12 Cum_YTD 12
+Hold_Amount 12 Expn_ChkNo 20
+Description ----------------------------------------------------------
+Record Type Value: EXPN
+Schedule Name/ID Values:
+D = Sched D / Summary of Expend Sup/Opp ... E = Sched E / Expenditures/Payments made
+G = Sched G / Payments made on Behalf F450P5 = F450 / Part 5 Exp & Contrib made; F461P5 = F461 / Part 5 Exp & Contrib made F465P3 = F465 / Independent Expenditures Made
+Transaction ID - permanent value unique to this item
+Values: [COM|RCP] - Recipient Committee; IND - Individual;
+OTH - Other
+Payee's Last name
+Payee's First name
+Payee's Prefix or Title Payee's Suffix
+Address of Payee
+Optional 2nd line of Address City
+State code Zip+4
+Date of Expenditure
+(Note: Date not on Sched E & G) Amount of Payment
+Cumulative / YTD Amt
+(No Cumulatives on Sched E & G) (Not used at this time)
+Check Number (Optional)
+R{x} Max
+Page 44 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ 20 C
+21 C
+22 C
+23 O
+24 O
+Expn_Dscr
+Agent_NamL
+Agent_NamF Agent_NamT Agent_NamS
+400 Purpose of Expense and/or Description / explanation
+200 Agent or Ind. Contractor's Last name (Sched G)
+45 Agent or Ind. Contractor's First name 10 Agent or Ind. Contractor's Prefix or Title 10 Agent or Ind. Contractor's Suffix
+EXPENDITURE SCHEDULES (D, E, G, F450P5, F461P5, F465P3) (Cont.)
+ R{x} # C{x}
+--- ----
+Field Name ---------------- Expn_Code
+Max
+Len Description
+----- ---------------------------------------------------------- 3 Expense Code - Values:
+19 C
+Note: CTB (if non-monetary) & IND need explanation & listing on Sched D.
+------ Fields 25 - 34 are NOT used on F460/Sched D ------
+25 C
+26 C
+27 C
+28 O
+29 O
+30 C
+31 O
+32 C
+33 C
+34 C
+Cmte_ID
+Tres_NamL Tres_NamF
+Tres_NamT Tres_NamS Tres_Adr1
+Tres_Adr2 Tres_City Tres_ST Tres_ZIP4
+9
+200
+45
+10 10 55
+55 30 2 10
+Committee ID
+(If [COM|RCP] & no ID#, Treas info Req.)
+Treasurer's Last name
+(Req if [COM|RCP] & no ID#) Treasurer's First name
+(Req if [COM|RCP] & no ID#) Treasurer's Prefix or Title Treasurer's Suffix
+Treasurer Street 1
+(Req if [COM|RCP] & no ID#) Treasurer Street 2
+Treasurer City
+Treasurer State
+Treasurer ZIP+4
+F460/Sched D & F461/Part5 ------ Candidate's Last name Candidate's First name Candidate's Prefix or Title Candidate's Suffix
+Office Sought (See table of code in Overview) Office Sought Description
+(Req. if Office_Cd=OTH)
+------ Fields 35 - 48 used on F450/Part5,
+35 C 36 C 37 O 38 O 39 C 40 C
+Cand_NamL Cand_NamF Cand_NamT Cand_NamS Office_Cd Offic_Dscr
+200
+45
+10
+10
+3
+40
+(Refer to list in Overview)
+Page 45 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ EXPENDITURE SCHEDULES (D, E, G, F450P5, F461P5, F465P3) (Cont.)
+ R{x} # C{x}
+--- ----
+41 C
+42 C
+43 C
+44 O
+45 O
+46 O
+47 O
+48 C
+49 O
+50 O
+51 O
+52 O
+53 O
+54 O
+Field Name ---------------- Juris_Cd
+Juris_Dscr Dist_No
+Off_S_H_Cd Bal_Name Bal_Num Bal_Juris Sup_Opp_Cd
+Memo_Code
+Memo_RefNo
+BakRef_TID
+G_From_E_F
+XRef_SchNm XRef_Match
+Max
+Len Description
+----- ---------------------------------------------------------- 3 Office Jurisdiction Code Values:
+STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District; CIT=City;
+CTY=County; LOC=Local; OTH=Other
+40 Office Jurisdiction Description
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]
+3 Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE]
+1 Office Sought/Held Code: H=Held; S=Sought 200 Ballot Measure Name
+7 Ballot Number or Letter
+40 Jurisdiction
+1 Support/Oppose Values: S; O (F450, F461, F465)
+1 Memo Amount?
+(Date/Amount are informational only)
+20 Reference to text contained in a TEXT record.
+20 Back Reference to a Tran_ID of a "parent" record
+1 Back Reference from Sched G to Sched 'E' or 'F'.
+2 Related item is included on Sched 'C' or 'H2' 1 X = Related item on other Sched has same
+Tran_ID
+Note: To disclose the Per Election to Date information, please refer to the "SPLT" record found in this document.
+Page 46 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 R
+06 C
+07 O
+08 O
+09 R
+10 O
+11 R
+12 R
+13 R
+14 R
+15 C
+16 C
+17 C
+18 C
+Field Name ---------------- Rec_Type
+Form_Type
+Tran_ID
+Entity_Cd
+Payee_NamL Payee_NamF Payee_NamT Payee_NamS Payee_Adr1 Payee_Adr2 Payee_City Payee_ST Payee_ZIP4
+Beg_Bal Amt_Incur Amt_Paid End_Bal Expn_Code
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: DEBT
+1 Schedule Name/ID
+Value: F = Sched F / Accrued Expenses
+20 Transaction ID - permanent value unique to this item
+3 Values: [COM|RCP] - Recipient Committee; IND - Individual; OTH - Other
+200 Payee's Last name 45 Payee's First name 10 Payee's Prefix or Title 10 Payee's Suffix
+55 Address of Payee
+55 Optional 2nd line of Address 30 City
+2 State code
+10 Zip+4
+12 Outstanding balance at beginning of this period 12 Amount incurred this period
+12 Amount paid this period
+12 Outstanding balance at close of this period
+3 Expense Code - Values: (Refer to list in Overview)
+ACCRUED EXPENSES (UNPAID BILLS) SCHEDULE (F)
+ Note: CTB (when non-monetary) & IND need explanation & listing on Sched D. 19 C Expn_Dscr 400 Purpose of Expense and/or Description /
+20 C Cmte_ID 9
+explanation
+Committee ID
+(If [COM|RCP] & no ID#, Treas info Req.)
+Page 47 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ACCRUED EXPENSES SCHEDULE (Continued)
+ # C{x} --- ----
+21 C
+22 C
+23 O
+24 O
+25 C
+26 O
+27 C
+28 C
+29 C
+30 O
+31 O
+32 O
+33 O
+34 O
+Field Name Len ---------------- -----
+Tres_NamL 200
+Tres_NamF 45
+Tres_NamT 10 Tres_NamS 10 Tres_Adr1 55
+Tres_Adr2 55 Tres_City 30 Tres_ST 2 Tres_ZIP4 10
+Memo_Code 1 Memo_RefNo 20 BakRef_TID 20
+XRef_SchNm 2 XRef_Match 1
+Description ----------------------------------------------------------
+Treasurer's Last name
+(Req if [COM|RCP] & no ID#) Treasurer's First name
+(Req if [COM|RCP] & no ID#) Treasurer's Prefix or Title Treasurer's Suffix
+Treasurer Street 1
+(Req if [COM|RCP] & no ID#) Treasurer Street 2
+Treasurer City
+Treasurer State
+Treasurer ZIP+4
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Back Reference to a Tran_ID of a "parent" record
+Related item is included on Sched 'C'
+X = Related item on other Sched has same Tran_ID
+R{x} Max
+Page 48 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ LOAN SCHEDULES / RECEIVED (B1, B2) & MADE (H)
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 C
+05 C
+06 R
+07 C
+08 O
+09 O
+10 R
+11 R
+12 R
+13 R
+14 R
+Field Name ----------------
+Rec_Type Form_Type
+Tran_ID
+Loan_TYPE Entity_Cd
+Lndr_NamL Lndr_NamF Lndr_NamT Lndr_NamS Loan_Adr1 Loan_Adr2 Loan_City Loan_ST Loan_ZIP4
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: LOAN 2 Schedule Name/ID
+Values: B1 = Sched B Part 1/ Loans Received; B2 = Sched B Part 2/ Loan Guarantors;
+H = Sched H, / Loans Made
+20 Transaction ID - permanent value unique to this item
+3 (Not used) Please leave null.
+3 Values: [COM|RCP] - Recipient Committee; (Req. on B1, and B2, not used on Sched. H); IND - Individual;
+OTH - Other;
+PTY - Political Party;
+SCC - Small Contributor Committee
+200 Lender's Last name
+45 Lender's First name (if a person) 10 Lender's Prefix or Title
+10 Lender's Suffix
+55 Address Line 1
+55 Address Line 2
+30 City
+2 State Code
+10 ZIP+4
+Schedule B Part 1 (B1) --------------------------------
+8 Date Loan Incurred (Original Date)
+8 Date Due (Date Loaned Due)
+12 Loan Amount (Amount Received this Period) 12 Outstanding Balance
+12 Cumulative Cont. to date(Calendar Year)
+12 Outstanding Balance Beg. this Period
+30 Interest Rate Paid This Period
+15 R
+16 R
+17 R
+18 C
+19 C
+20 C
+21 R
+(Remaining Loan Amounts found in fields 49 through 54 of this Schedule)
+Loan_Date1 Loan_Date2 Loan_Amt1 Loan_Amt2 Loan_Amt3 Loan_Amt4 Loan_Rate
+LOAN SCHEDULES / RECEIVED & MADE (Continued)
+ Page 49 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+Field Name ----------------
+Max
+Len Description
+----- ----------------------------------------------------------
+Schedule B Part 2 (B2) -------------------------------
+Loan_Date1 Loan_Date2 Loan_Amt1 Loan_Amt2 Loan_Amt3 Loan_Amt4 Loan_Rate
+Schedule H; definitions (H) --------------------------------
+8 Date of Loan
+8 N/A (Not Used)
+12 Amount Guaranteed this Period
+12 Balance Outstanding to Date
+12 Cumulative To Date (Calendar Year Amnt) 12 N/A (Not used)
+30 N/A (Not used)
+15 R
+16 R
+17 C
+18 R
+19 C
+20 N/A
+21 C
+(Remaining Loan Amounts found in fields 49 through 54 of this Schedule)
+22 C
+23 C
+24 O
+Loan_EMP Loan_OCC Loan_Self
+200 Employer (If Sched B1, or Sched H)
+60 Occupation (If Sched B1, or Sched H)
+1 Check Box: Self Employed?(Sched B1 & H)
+Loan_Date1 Loan_Date2 Loan_Amt1 Loan_Amt2 Loan_Amt3 Loan_Amt4 Loan_Rate
+------ Fields 25 - 34 are used on F460/Sched B1 & B2 ------
+25 C
+26 C
+27 C
+28 O
+29 O
+30 C
+Cmte_ID
+Tres_NamL Tres_NamF
+Tres_NamT Tres_NamS Tres_Adr1
+9 Committee ID
+(If [COM|RCP] & no ID#, Treas info Req.)
+200 Treasurer's Last name
+(Req if B1 or B2 [COM|RCP] & no ID#)
+45 Treasurer's First name
+(Req if B1 or B2 [COM|RCP] & no ID#)
+10 Treasurer's Prefix or Title 10 Treasurer's Suffix
+55 Treasurer Street 1
+(Req if B1 or B2 [COM|RCP] & no ID#)
+8 Date Loan Made (Original Date)
+8 Date Loan Due
+12 Amount Loaned This Period
+12 Outstanding Balance at Close of this Period 12 Cumulative Loans to Date (Calendar Year) 12 Outstanding Balance Beginning this Period 30 Interest Received Rate
+15 R
+16 R
+17 R
+18 C
+19 C
+20 C
+21 R
+(Remaining Loan Amounts found in fields 49 through 54 of this Schedule)
+LOAN SCHEDULES / RECEIVED & MADE (Continued)
+ Page 50 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+31 O
+32 C
+33 C
+34 C
+Field Name ----------------
+Tres_Adr2 Tres_City Tres_ST Tres_ZIP4
+Max
+Len Description
+----- ----------------------------------------------------------
+55 Treasurer Street 2 30 Treasurer City
+2 Treasurer State 10 Treasurer ZIP+4
+-------- Following field used on Sched B Part 2 for Lender ------------
+35 O Lender_Name 200 --------- Intermediary information ----------
+Lenders Name
+Intermediary's Last name Intermediary's First name Intermediary's Prefix or Title Intermediary's Suffix Intermediary Street 1 Intermediary Street 2 Intermediary City Intermediary State Intermediary ZIP+4
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Back Reference to a Tran_ID of a "parent" record
+Related item is included on Sched 'A' or 'E' 'X' = Related item on other
+Sched has same Tran_ID
+35 O
+36 O
+37 O
+38 O
+39 C
+40 O
+41 C
+42 C
+43 C
+44 O
+45 O
+46 O
+47 O
+48 O
+Intr_NamL 200 Intr_NamF 45 Intr_NamT 10 Intr_NamS 10 Intr_Adr1 55 Intr_Adr2 55 Intr_City 30 Intr_ST 2 Intr_ZIP4 10
+Memo_Code 1 Memo_RefNo 20 BakRef_TID 20
+XRef_SchNm 2 XRef_Match 1
+Page 51 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ LOAN SCHEDULES / RECEIVED & MADE (Continued)
+Schedule B Part 1 (B1) & Part 2 (B2) -------------------------------- Note: Fields 49, 50, 51 and 52 are not used in (B2)
+ R{x} # C{x}
+--- ----
+49 C
+50 C
+51 C
+52 C
+Field Name ----------------
+Loan_Amt5 Loan_Amt6 Loan_Amt7 Loan_Amt8
+Max
+Len Description
+----- ----------------------------------------------------------
+12 Amount Paid this Period(B1 only)
+12 Amount Forgiven this Period (B1 only)
+12 Amount of Interest Paid this Period(B1 only) 12 Original Amount of Loan(B1 only)
+Schedule H --------------------------------
+49 C
+50 C
+51 C
+52 C
+Loan_Amt5 Loan_Amt6 Loan_Amt7 Loan_Amt8
+12 Amount Paid this Period
+12 Amount Forgiven this Period
+12 Amount of Interest Received this Period 12 Original Amount of Loan
+Note: To disclose the Per Election to Date information, please refer to the "SPLT" record found in this document.
+Page 52 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Form 401 Payment & Other Disclosure Sched (F401B, F401B-1, F401C, F401D)
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 C
+05 O
+06 O
+07 O
+08 C
+09 O
+10 O
+11 O
+12 C
+13 O
+14 C
+15 C
+16 C
+17 C
+18 C
+19 C
+Field Name ---------------- Rec_Type Form_Type
+Tran_ID
+Agent_NamL Agent_NamF Agent_NamT Agent_NamS
+Payee_NamL Payee_NamF Payee_NamT Payee_NamS Payee_Adr1 Payee_Adr2 Payee_City Payee_ST Payee_ZIP4 Amount Aggregate Expn_Dscr
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: S401
+7 Sched Name:
+F401B = Payments Made
+F401B-1 = Payments Made in Behalf of F401C = Persons Receiving $1000 +
+F401D = Cand/Measure not on Sched F401A
+20 Transaction ID - permanent value unique to this item
+200 Agent's Last name (401B-1) 45 Agent's First name
+10 Agent's Prefix or Title
+10 Agent's Suffix
+200 Payee's Last name 45 Payee's First name 10 Payee's Prefix or Title 10 Payee's Suffix
+55 Address
+55 Optional 2nd line of Address
+30 City
+2 State code
+10 Zip+4
+12 Amount (Sched F401B, F401B-1, F401C) 12 Aggregate YTD Amount (Sched F401C) 90 Purpose of Expense and/or Description
+------ Fields 20 - 33 used on F401D --------------------------------------
+20 C
+21 C
+22 O
+23 O
+24 C
+25 C
+Cand_NamL 200 Cand_NamF 45 Cand_NamT 10 Cand_NamS 10 Office_Cd 3 Offic_Dscr 40
+Candidate's Last name Candidate's First name Candidate's Prefix or Title Candidate's Suffix
+Office Sought (See table of code in Overview) Office Sought Description
+(Req. if Office_Cd=OTH)
+Page 53 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Form 401 Payment & Other Disclosure Sched (Continue)
+ # C{x} --- ----
+26 C
+27 C
+28 C
+29 O
+30 O
+31 O
+32 O
+33 C
+34 O
+35 O
+36 O
+Field Name Len ---------------- -----
+Juris_Cd 3
+Juris_Dscr 40
+Dist_No 3
+Off_S_H_Cd 1 Bal_Name 200 Bal_Num 7 Bal_Juris 40 Sup_Opp_Cd 1
+Memo_Code 1 Memo_RefNo 20 BakRef_TID 20
+Description ----------------------------------------------------------
+Office Jurisdiction Code Values: STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District; CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+Off. Juris. Description
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH] Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE]
+Office Sought/Held Code: H=Held; S=Sought Ballot Measure Name
+Ballot Number or Letter
+Jurisdiction
+Support/Oppose? Values: S; O (F401)
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Back Reference to a Tran_ID of a "parent" record
+R{x} Max
+Page 54 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Form 496 Late Independent Expenditures Made
+ # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 C
+05 C
+06 O
+07 C
+08 O
+09 O
+Field Name Len ---------------- ----- Rec_Type 4
+Form_Type 4
+Tran_ID 20
+Amount 12 Exp_Date 8
+Date_Thru 8 Expn_Dscr 90 Memo_Code 1 Memo_RefNo 20
+Description ---------------------------------------------------------- Record Type Value: S496
+Schedule Name/ID Value:
+F496 = Independent Expenditures Made
+Transaction ID - permanent value unique to this item
+Expenditure Amount
+Expenditure Date
+(Begin date of date range for Items paid)
+End-date of date range for Items paid Purpose of Expenditure and/or Description
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+R{x} Max
+Page 55 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Form 497 Late Contributions Received/Made
+ # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 Rx
+05 R
+06 C
+07 O
+08 O
+09 C
+10 O
+11 C
+12 C
+13 C
+14 C
+15 C
+16 O
+17 C
+18 R
+19 O
+Field Name Len ---------------- ----- Rec_Type 4
+Form_Type 6
+Tran_ID 20 Entity_Cd 3
+Enty_NamL 200 Enty_NamF 45 Enty_NamT 10 Enty_NamS 10 Enty_Adr1 55 Enty_Adr2 55 Enty_City 30 Enty_ST 2 Enty_ZIP4 10
+Ctrib_Emp 200
+Ctrib_Occ 60
+Ctrib_Self 1
+Elec_Date 8 Ctrib_Date 8
+Date_Thru 8
+Description ---------------------------------------------------------- Record Type Value: S497
+Schedule Name/ID
+Value: F497P1 = Late Contribution Received Value: F497P2 = Late Contribution Made
+Transaction ID - permanent value unique to this item
+Values:
+CAO - Candidate/Office-holder (F497P2) BNM - Ballot Measure (F497P2)
+[COM|RCP] - Recipient Committee IND - Individual;
+OTH - Other (e.g. a Bus, Cmtte, Org, ...) PTY - Political Party
+SCC - Small Contributor Committee
+Contributor/Recipient's Last name Contributor/Recipient's First name Contributor/Recipient's Prefix or Title Contributor/Recipient's Suffix Address of Contributor/Recipient Optional 2nd line of Address
+City
+State code Zip+4
+Employer
+(Sched A, C, D - Req. if Entity = 'IND') Occupation
+(Sched A, C, D - Req. if Entity = 'IND') Check Box: Self Employed?
+Date of Election (Req. if P2)
+Date item Received/Made
+(Begin date of date range for Items received) End-date of date range for Items received
+R{x} Max
+Page 56 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ # C{x} --- ----
+20 R
+21 C
+22 C
+23 C
+24 O
+25 O
+26 C
+27 C
+28 C
+29 C
+30 C
+31 O
+32 O
+33 O
+34 O
+35 O
+36 O
+Field Name Len ---------------- ----- Amount 12
+Cmte_ID 9
+Cand_NamL 200 Cand_NamF 45 Cand_NamT 10 Cand_NamS 10 Office_Cd 3 Offic_Dscr 40
+Juris_Cd 3
+Juris_Dscr 40 Dist_No 3 Off_S_H_Cd 1
+Bal_Name 200 Bal_Num 7 Bal_Juris 40
+Memo_Code 1 Memo_RefNo 20
+Description ---------------------------------------------------------- Amount Received/Made
+Committee ID
+(Req. if Entity_Cd=[CAO|RCP]
+(Absolutely Req. on F497P2 when[CAO|RCP].)
+Candidate's Last name Candidate's First name Candidate's Prefix or Title Candidate's Suffix
+Office Sought (See table of code in Overview) Office Sought Description
+Form 497 Late Contributions Received/Made (Continued)
+ R{x} Max
+(Req. if Office_Cd=OTH)
+Office Jurisdiction Code STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District; CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+Office Jurisdiction Description
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH]) Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE])
+Office Sought/Held Code: H=Held; S=Sought
+Ballot Measure Name Ballot Number or Letter Jurisdiction
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Page 57 of 95
+Values:
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ 03 Rx
+04 R
+05 C
+06 R
+07 C
+08 O
+09 O
+10 R
+11 O
+12 R
+13 R
+14 R
+Tran_ID Entity_Cd
+Cmte_ID Payor_NamL Payor_NamF Payor_NamT Payor_NamS Payor_Adr1 Payor_Adr2 Payor_City Payor_ST Payor_ZIP4
+20 Transaction ID - permanent value unique to this item
+3 Values:
+CAO - Candidate/Office-holder [COM|RCP] - Recipient Committee
+IND - Individual;
+OTH - Other (e.g. a Bus, Cmtte, Org, ...)
+9 Committee ID of Payee (if CAO or [COM|RCP]) 200 Payor's Last name
+45 Payor's First name
+10 Payor's Prefix or Title
+10 Payor's Suffix
+55 Address of Payor
+55 Optional 2nd line of Address 30 City
+2 State code
+10 Zip+4
+Form 498 Late Independent Expenditures Made
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+Field Name ---------------- Rec_Type
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: S498
+6 Schedule Name/ID Value:
+F498-R = Late Payment Received From F498-A = Late Payment Attributed To
+Form_Type
+Note: Only one F498-R record is used per F498 filing.
+------ Fields #15 & #19 are used when Form_Type = 'F498-R' -------------------
+15 O 16 O 17 O 18 C 19 C
+Employer 200 Occupation 60 SelfEmp_CB 1 Date_Rcvd 8 Amt_Rcvd 12
+Employer (only if Form_Type = 'F498-R') Occupation (only if Form_Type = 'F498-R') Check Box: Self Employed?
+Date Received (only if Form_Type = 'F498-R') Amount Recved (only if Form_Type = 'F498-R')
+Page 58 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Form 498 Late Independent Expenditures Made (Continue) ------ Fields #20 & #34 are used when Form_Type = 'F498-A' -------------------
+ # C{x} --- ----
+20 C
+21 C
+22 O
+23 O
+24 C
+25 C
+26 C
+27 C
+28 C
+29 O
+30 O
+31 O
+32 O
+33 C
+34 C
+35 O
+36 O
+Field Name Len ---------------- ----- Cand_NamL 200 Cand_NamF 45 Cand_NamT 10 Cand_NamS 10 Office_Cd 3 Offic_Dscr 40
+Juris_Cd 3
+Juris_Dscr 40
+Dist_No 3
+Off_S_H_Cd 1 Bal_Name 200 Bal_Num 7 Bal_Juris 40 Sup_Opp_Cd 1
+Amt_Attrib 12
+Memo_Code 1 Memo_RefNo 20
+Description ---------------------------------------------------------- Candidate's Last name
+Candidate's First name
+Candidate's Prefix or Title
+Candidate's Suffix
+Office Sought (See table of code in Overview) Office Sought Description
+(Req. if Office_Cd=OTH)
+Office Jurisdiction Code
+STW=Statewide;
+SEN=Senate District;
+ASM=Assembly District;
+BOE=Board of Equalization District;
+CIT=City;
+CTY=County;
+LOC=Local;
+OTH=Other
+Off. Juris. Dscrip
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH])
+Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE])
+Office Sought/Held Code: H=Held; S=Sought Ballot Measure Name
+Ballot Number or Letter
+Jurisdiction
+Support/Oppose? Values: S; O (F401)
+Amount Attributed
+(only if Form_Type = 'F498-A')
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+R{x} Max
+Page 59 of 95
+Values:
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ *******************************************************************************
+Section 2 - Campaign Statements
+*******************************************************************************
+400 Statement of Organization (Slate Mailer Organization) 402 Statement of Termination (Slate Mailer Organization) 410 Statement of Organization Recipient Committee
+Electronic File Components by Filing Type
+ RecType FormName
+HDR CAL CVR F400
+CVR2 F400
+CVR3 F400
+HDR CAL CVR F402 CVR3 F402
+HDR CAL CVR F410
+CVR2 F410
+CVR3 F410
+Description
+"CAL" Header record
+Cover Page; Stmt of Organization / Slate Mailer Org Cover Page; Additional Names & Addresses
+Cover Page; Part V; Verification Information
+"CAL" Header record
+Cover Page; Stmt of Termination / Slate Mailer Org Cover Page; Verification Information
+"CAL" Header record
+Cover Page; Stmt of Organization / Recipient Committee Cover Page; Additional Names & Addresses
+Cover Page; Part 3; Verification Information
+   Page 60 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F400, F410 (STATEMENT OF ORGANIZATION)
+  F402 (STMT OF TERMINATION - SLATE MAILER)
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 Rx
+05 Rx
+06 O
+07 O
+08 O
+09 Rx
+10 Rx
+11 C
+12 C
+Field Name ---------------- Rec_Type
+Form_Type
+Filer_ID Entity_Cd
+Filer_NamL Filer_NamF Filer_NamT Filer_NamS
+Report_Num
+Rpt_Date
+Qual_CB Qualfy_Dt
+Max
+Len Description
+----- ---------------------------------------------------------- 3 Record Type Value: CVR
+4 Type of Filing/Form set - Values: (F400; F402; F410)
+9 Committee ID number of Filer
+3 Entity Code of the Filer. Values:
+SMO - Slate Mailer Organization (F400,402) [COM|RCP] - Recipient Committee (F410)
+200 Cand. Last name or Cmtte/Org Name 45 Candidate's First name
+10 Candidate's Prefix or Title
+10 Candidate's Suffix
+3 Report Number - Values: 000 - Original Report
+001 thru 999 - Amended Rpt #1-#999 8 Date this report is filed
+1 Qualified Committee check-box (Req. if SMO) 8 Date Qualified as committee
+(Req. if Qual_CB=X)
+8 Termination Effective Date (Req. if F402)
+13 C
+--------- Address information for Org / Committee / Candidate or Office holder -------
+14 R Adr1 15 O Adr2 16 R City 17 R ST
+18 R ZIP4 19 R Phone
+20 R County_Res
+55 Street 1
+55 Street 2 (Overflow for Addr1) 30 City
+2 State
+10 ZIP+4
+20 Phone Number
+20 County of Domicile, Residence, or Location Page 61 of 95
+T erm_Date
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR STATEMENT OF ORGANIZATION/TERMINATION (Continued)
+  R{x} # C{x}
+--- ----
+21 O
+22 O
+23 O
+24 C
+25 C
+26 C
+27 O
+28 O
+29 R
+30 R
+31 O
+32 O
+33 R
+34 O
+35 R
+36 R
+37 R
+38 R
+Field Name ---------------- County_Act Mail_Adr1 Mail_Adr2 Mail_City Mail_ST Mail_ZIP4
+Cmte_FAX Cmte_Email
+Tres_NamL Tres_NamF Tres_NamT Tres_NamS
+Tres_Adr1 Tres_Adr2 Tres_City Tres_ST Tres_ZIP4 Tres_Phon
+Max
+Len Description
+----- ---------------------------------------------------------- 20 County where Active (F410)
+55 Mailing Address of Filing Committee - Street 1 55 Mailing Address of Filing Committee - Street 2 30 Mailing Address of Filing Committee - City
+2 Mailing Address of Filing Committee - State 10 Mailing Address of Filing Committee - ZIP+4
+20 Optional Committee FAX number 60 Optional Committee Email address
+200 Treasurer's Last name 45 Treasurer's First name 10 Treasurer's Prefix or Title 10 Treasurer's Suffix
+55 Treasurer Street 1 55 Treasurer Street 2 30 Treasurer City
+2 Treasurer State 10 Treasurer ZIP+4 20 Treasurer Phone
+39 C
+Actvty_Lvl 2 Main level of Activity
+(Req. if SMO or GenPurp_CB=X)
+Values: CI = City; CO = County; ST = State
+Note: F400 Name/Addr info for Principal Officer(s) (POF) are coded on CVR2 records with the CVR2.Item_Cd='POF'. Slate Mailer Auth Individuals (SMA) are coded on CVR2 records with Item_Cd='SMA'.
+Note: F410 Name/Addr info for Assistant Treasurer (ATR) and any other Principal Officer(s) (POF) are coded on CVR2 records with the CVR2.Item_Cd=['ATR'|'POF'].
+Page 62 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE LAYOUT FOR STATEMENT OF ORGANIZATION/TERMINATION (Continued)
+  ------ Fields 40 - 42 used on F400
+Statement of Organization ---------------
+Max
+Len Description
+----- ---------------------------------------------------------- 1 Is this SMO a 82013 "Committee"?
+(Yes/No) (F400)
+200 Name of 82013 Committee
+(F400; when Com82013YN=Y) 9 ID of 82013 Committee
+(if Com82013Nm is a RCP cmtte)
+Statement of Organization ---------------
+1 Controlled Committee Check-box
+R{x} # C{x}
+--- ----
+40 C
+41 C
+42 O
+Field Name ---------------- Com82013YN
+Com82013Nm Com82013ID
+------ Fields 43 - 58 used on F410 43 O Control_CB
+Note: Name/Address info supplied on CVR2 record(s) with Item_Cd='CTL'.
+44 O Bank_Nam
+45 C Bank_Adr1
+46 O Bank_Adr2
+47 C Bank_City
+48 C Bank_ST
+49 C Bank_ZIP4
+50 C Bank_Phon
+51 C Bank_AcctNo
+52 C Reservd_Dt
+53 O Reservd_Commt
+54 O PrimFC_CB
+Note: Name/Address info supplied on CVR2 record(s) with Item_Cd='PFC'.
+55 O GenPurp_CB
+56 O GPC_Descr
+1 General Purpose Committee Check-box 300 Brief description of Activity of GPC
+200 Name of Financial Institution
+55 Street 1 of Financial Institution
+55 Street 2 of Financial Institution
+30 City of Financial Institution
+2 State of Financial Institution
+10 ZIP+4 of Financial Institution
+20 Phone of Financial Institution
+20 Bank Account Number
+8 Reserved Date (not used at this time)
+90 Reserved Text Field (not used at this time)
+1 Primarily Formed Committee Check-box
+1 Sponsored Committee Check-box
+57 O Sponsor_CB
+Note: Name/Address info supplied on CVR2 record(s) with Item_Cd='SPO'.
+58 O BrdBase_CB 1 Broad Based Committee Check-box
+59 O SmCont_QualDt 8 Date Small Contributor Committee Qualified
+Page 63 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE ({2} ADDITIONAL NAMES/COMMITTEES) RECORD LAYOUT
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ---------------- Rec_Type Form_Type
+Tran_ID
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: CVR2
+4 Form_Type
+(must equal Form_Type in CVR record)
+values: F400; F410
+20 Transaction ID - permanent value unique to
+this item
+Note: Remainder of CVR2 record is parsed depending on value of Form_Type.
+------ Following variable fields used when Form_Type=[F400|F410] -------------
+04 Rx
+Entity_Cd 3
+Values:
+ATR - Assistant Treasurer (F410)
+POF - Principal Officer (F400, F410)
+CAO - Candidate/Office-holder (F410) PRO - Proponent (F410)
+SPO - Sponsor (F410)
+BNM - Ballot Measure's Name/Title (F410) ATH - Authorizing Individual (F400)
+COM - Committee (F400)
+CTL - Controlled Committee (F410)
+RCP - Recipient Committee (F400)
+Filing Entity's Last name Filing Entity's First name Filing Entity's Prefix or Title Filing Entity's Suffix
+Section of Stmt of Org this Itemization relates to Values:
+ATR - Assistant Treasurer (F410)
+POF - Principal {Filing} Officer (F400, F410) CTL - Controlled Committee Itemization (F410) PFC - Primarily Formed Commtte Item (F410) SPO - Sponsored Commtte Itemization (F410) SMA - Slate Mailer Authorizor (F400)
+05 Rx
+06 C
+07 O
+08 O
+09 Rx
+Enty_NamL 200 Enty_NamF 45 Enty_NamT 10 Enty_NamS 10
+Item_Cd 3
+Page 64 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE - {{2} ADDITIONAL NAMES/COMMITTEES SECTION} RECORD LAYOUT (Cont.)
+  R{x} # C{x}
+--- ----
+Field Name
+----------------
+Max
+Len Description
+----- ----------------------------------------------------------
+55 Address (if Item_Cd = SPO) 55 Optional 2nd line of Address 30 City (if Item_Cd = SPO)
+2 State code (if Item_Cd = SPO) 10 Zip+4 (if Item_Cd = SPO)
+20 Daytime Phone Number 20 FAX Phone Number
+60 Email Address
+{does not map to present FPPC forms}
+9 Committee ID (If Entity_Cd=RCP)
+90 Industry Group / Affiliation (if Item_Cd = SPO) 45 Position/Title of Prin Officer (if Item_Cd = POF)
+(*Field Name Changed)
+10 C 11 O 12 C 13 C 14 C 15 O 16 O 17 O
+18 C 19 C 20 C
+Cvr2_Adr1 Cvr2_Adr2 Cvr2_City Cvr2_ST Cvr2_ZIP4 Day_Phone FAX_Phone Email_Adr
+Cmte_ID Ind_Group POF_Title
+21 C 22 C
+23 C
+24 C 25 C
+26 O 27 C
+Office_Cd Offic_Dscr
+Juris_Cd
+Juris_Dscr
+Dist_No
+Off_S_H_Cd Non_Pty_CB
+3 Office Sought (See table of code in Overview) 40 Office Sought Description
+Note: Fields #21 - #32 used when Item_Cd=[CTL|PFC]
+Note: On F410; when Item_Cd='PFC': EITHER Candidate OR Ballot Measure
+information is "conditionally required", BUT not both at the same time.
+(Req. if Office_Cd=OTH) 3 Office Jurisdiction Code
+Values:
+STW=Statewide;
+SEN=Senate District; ASM=Assembly District; BOE=Board of Equalization District; CIT=City;
+CTY=County; LOC=Local; OTH=Other
+40 Off. Juris. Dscrip
+(Req. if Juris_Cd=[CIT|CTY|LOC|OTH])
+3 Office District Number
+(Req. if Juris_Cd=[SEN|ASM|BOE])
+1 Office Sought/Held Code: H=Held; S=Sought 1 Non-Partisan check-box
+(only if Item_Cd = CTL) Page 65 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE - {{2} ADDITIONAL NAMES/COMMITTEES SECTION} RECORD LAYOUT (Cont.)
+  R{x} # C{x}
+--- ----
+28 C
+29 C
+30 C
+31 C
+32 C
+Field Name ---------------- Party_Name
+Bal_Num Bal_Juris Sup_Opp_Cd
+Year_Elect
+Max
+Len Description
+----- ---------------------------------------------------------- 200 Name of Party (if partisan)
+(only if Item_Cd = CTL) 7 Ballot Number or Letter (only if Item_Cd = PFC)
+40 Ballot Measure Jurisdiction (only if Item_Cd = PFC)
+1 Support/Oppose? Values: S; O (only if Item_Cd = PFC)
+4 Year of Election (format ccyy) (only if Item_Cd = CTL)
+R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ---------------- Rec_Type
+Form_Type Tran_ID
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: CVR3
+4 Form_Type
+(must equal Form_Type in CVR record) Values: F400; F402; F410
+20 Transaction ID - permanent value unique to this item
+COVER PAGE (PART III; VERIFICATION INFO) RECORD LAYOUT
+ Note: Remainder of CVR3 record is parsed depending on value of Form_Type. Refer to Section I description of the CVR3 record for the description of field parsing rules for Campaign Statements F400, F402, F410.
+Page 66 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ *******************************************************************************
+Section 3 - Lobbyist Disclosure Reports
+*******************************************************************************
+615 Lobbyist Report
+625 Report of Lobbying Firm
+630* Payments Made to Lobbying Coalitions (Attachment to Form 625 or 635) 635 Report of Lobbyist Employer or Report of Lobbying Coalition
+635-C* Payments Received by Lobbying Coalitions
+640* 645 690*
+Governmental Agencies Reporting (Attachment to Form 635 or Form 645) Report of Person Spending $5,000 or More
+Amendment to Lobbying Disclosure Report
+Note: The 630, 635-C, 640, and 690 forms are not filed as standalone forms, but instead are included within the 615, 625, 635, and 645 filings.
+*******************************************************************************
+Electronic File Components by Filing Type
+ RecType FormName
+HDR CAL CVR F615 F690 F615 LEXP F615P1 LCCM F615P2
+HDR CAL CVR F625 CVR2 F625 F690 F625 SMRY F625... LPAY F625P2 LEXP F625P3A LOTH F625P3B
+Description
+"CAL" Header record
+Cover Page; Lobbyist Report
+Amendment Information sheet (a.k.a. Form 690) Part I - Activity Expenses
+Part II - Campaign Contributions Made [or Delivered]
+"CAL" Header record
+Cover Page; Recipient Committee
+Cover Page; Part II; Partners, Owners, Officers, ... Amendment Information sheet (a.k.a. Form 690) Summary Page & Misc. Schedule Line-item [sub]totals Payments Received in Connection with Lobbying Activity Part III/Sec A - Activity Expenses
+Part III/Sec B - Payments to OTHER Lobbying Firms
+   Page 67 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ LCCM F625P4B LATT S630
+RecType FormName HDR CAL
+CVR F635 CVR2 F635
+F690 F635 SMRY F635... LPAY F635P3B LEXP F635P3C LCCM F635P4B LATT S630 LATT S635-C LATT S640
+HDR CAL CVR F645 F690 F645 SMRY F645... LEXP F645P2A LCCM F645P3B LATT S630 LATT S640
+Part IV/Sec B - Campaign Contributions Made Attachment Form 630 - Payments Made to Lobbying Coalitions
+Description
+"CAL" Header record
+Cover Page; Candidate Committee
+Cover Page; Part II; Partners, Owners, Officers, ... Amendment Information sheet (a.k.a. Form 690)
+Summary Page & Misc. Schedule Line-item [sub]totals
+Part III/Sec B - Payments to Lobbying Firms
+Part III/Sec C - Activity Expenses
+Part IV/SecB - Campaign Contributions Made
+Attach Form 630 - Payments Made to Lobbying Coalitions Attach Form 635-C - Payments Rcvd by Lobbying Coalitions Attach Form 640 - Other Payments to Influence ...
+"CAL" Header record
+Cover Page; Recipient Committee
+Amendment Information sheet (a.k.a. Form 690) Summary Page & Misc. Schedule Line-item [sub]totals Part II/Sec A - Activity Expenses
+Part III/SecB - Campaign Contributions Made
+Attach Form 630 - Payments Made to Lobbying Coalitions Attach Form 640 - Other Payments to Influence ...
+   COVER PAGE RECORD LAYOUT FOR F615,625,635,645 LOBBYIST DISCLOSURE REPORTS
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ---------------- Rec_Type Form_Type
+Sender_ID
+Max
+Len Description
+----- ---------------------------------------------------------- 3 Record Type Value: CVR
+4 Type of Filing or Form set.
+Values: F615; F625; F635; F645
+9 ID# of Lobbyist Entity that is SUBMITTING this report.
+Note: This is the ID# assigned by the SOS after the Lobbyist Entity first registers. Typically, it is the same as the Filer_ID except when a Firm is submitting a report on behalf of another Lobbyist Entity.)
+Page 68 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ 05 R
+06 Rx
+07 C
+08 O
+09 O
+10 Rx
+11 Rx
+12 R
+13 R
+14 C
+15 C
+Entity_Cd
+Filer_NamL
+Filer_NamF Filer_NamT Filer_NamS
+Report_Num
+Rpt_Date From_Date Thru_Date Cum_Beg_Dt
+Firm_ID
+3
+200
+45 10 10
+3
+8 8 8 8
+9
+COVER PAGE RECORD LAYOUT (Continue)
+ R{x} # C{x}
+--- ----
+04 Rx
+Field Name ---------------- Filer_ID
+Max
+Len Description
+----- ----------------------------------------------------------
+9 ID# of Lobbyist Entity that is SUBJECT of this
+report.
+Note: In the case of F615 & F635 reports, the Sender and Filer ID# are not necessarily the same. However, they must always be equal on F625 and 645 reports.
+Note: The contents of this record (Name/Address/etc.) belong to the Lobbying
+Entity of the Filer_ID, NOT
+the Lobbying Entity of the Sender_ID.
+Entity Code of the Filer Values:
+LBY - Lobbyist (a person) (F615, F645) FRM - Lobbying Firm (F625, F645)
+LEM - Lobbying Employer (F635, F645) LCO - Lobbying Coalition (F635, F645) IND - Person (spending > $5000) (F645) OTH - Other (F645)
+Name of Lobbyist, Firm, Employer, Coalition or Major Donor that is filing report
+Lobbyist Entity First name
+Lobbyist Entity Prefix or Title
+Lobbyist Entity Suffix
+Report Number - Values:
+000 - Original Report
+001 thru 999 - Amended Rpt #1-#999
+Date this report is filed
+Reporting Period From Date Reporting Period T o/Through Date Cumulative Period Beginning Date (Req on F625,635,645)
+ID# of Firm/Employer/Coalition (Req on F615)
+Note: This is the ID# of the Firm/Employer/Coalition the Lobbyist works for - if Lobbyist not self-employed.
+Page 69 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F615,625,635,645 (Continued)
+R{x} Max
+ # C{x} Field Name --- ---- ----------------
+16 C Firm_Name
+Len Description
+----- ----------------------------------------------------------
+200 Name of Firm/Employer/Coalition (Req on F615)
+17 R
+18 O
+19 R
+20 R
+21 R
+22 R
+23 O
+24 O
+25 C
+26 C
+27 C
+28 O
+Firm_Adr1 Firm_Adr2
+Firm_City Firm_ST Firm_ZIP4 Firm_Phon
+55 Street 1 of Firm/Employer/Coalition or Business
+55 Street 2 of Firm/Employer/Coalition or Business
+30 City of Firm/Employer/Coalition or Business
+2 State of Firm/Employer/Coalition or Business 10 ZIP+4 of Firm/Employer/Coalition or Business 20 Phone of Firm/Employer/Coalition or Business
+29 R
+30 R
+Sig_Date 8 Date when signed
+Sig_Loc 45 City and State where signed
+Note: This is the Name of the Firm/Employer/Coalition the Lobbyist works for - if Lobbyist not self-employed.
+Firm_Name is mapped to print rendering of the 690 form only for amended F615 reports when Entity_Cd = 'LBY'.)
+Mailing Address fields only apply to F615 and F625 filings.
+ Mail_Adr1 Mail_Adr2
+Mail_City Mail_ST
+Mail_ZIP4
+Mail_Phon
+55 Mail Address of Firm/Employer/Coalition Street 1
+55 Mail Address of Firm/Employer/Coalition Street 2
+30 Mail Address of Firm/Employer/Coalition 2 Mail Address of Firm/Employer/Coalition
+State
+10 Mail Address of Firm/Employer/Coalition
+ZIP+4
+20 Mail Address of Firm/Employer/Coalition
+–
+–
+- City –
+–
+–
+Phone
+Note: This field does not appear on any forms, use for a second, alternate
+phone number is optional.
+Note: Fields 29-39 are also mapped to the print rendering of the F690
+Page 70 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F615,625,635,645 (Continued)
+ R{x} # C{x}
+--- ----
+31 R
+32 R
+33 O
+34 O
+35 R
+36 R
+37 O
+38 O
+39 C
+Field Name ---------------- Sig_NamL Sig_NamF Sig_NamT Sig_NamS
+Prn_NamL Prn_NamF
+Prn_NamT Prn_NamS
+Sig_Title
+Max
+Len Description
+----- ---------------------------------------------------------- 200 Signer "as signed" Last name
+45 Signer "as signed" First name
+10 Signer "as signed" Prefix or Title
+10 Signer "as signed" Suffix
+200 Signer "as typed/printed" Last name (F625,F635,F645)
+45 Signer "as typed/printed" First name (F625,F635,F645)
+10 Signer "as typed/printed" Prefix or Title 10 Signer "as typed/printed" Suffix
+45 Title of Signer (F625,F635,F645)
+------ Variable F615 fields follow when Form_Type=F615 -----------------------
+40 O NoPart1_CB 1 "No Part I information" check-box
+41 O NoPart2_CB 1 "No Part II information" check-box
+------ Variable F625 fields follow when Form_Type=F625 -----------------------
+40 O
+41 O
+42 O
+43 O
+44 O
+45 O
+Part1_1_CB
+Part1_2_CB Ctrib_N_CB Ctrib_Y_CB Lobby_N_CB Lobby_Y_CB
+1 "Partners, Owners, Form 615 attached" check- box
+1 "Partners, Owners, Listed below" check-box
+1 "No Campaign Contributions Made" check-box 1 "Part IV completed and Attached" check-box
+1 "Lobby Coalition - None" check-box
+1 "Lobby Coalition - F630 attached" check-box
+------ If applicable, give Major Donor Name or Recipient Committee & ID
+46 C 47 C 48 O 49 O
+50 C 51 C
+Major_NamL Major_NamF Major_NamT Major_NamS
+RcpCmte_Nm RcpCmte_ID
+200 Major Donor Last Name (Part IV; Section A) 45 Major Donor First Name(s)
+10 Major Donor Prefix or Title
+10 Major Donor Suffix
+200 Recipient Committee Name (Part IV; Sec. A)
+9
+Recipient Cmtte (or Major Donor) ID# (Part IV; Sec A)
+Page 71 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE RECORD LAYOUT FOR F615,625,635,645 (Continued) ------ Variable F635 fields follow when Form_Type=F635 ------------------------
+ R{x} # C{x}
+--- ----
+40 O
+41 O
+Field Name ---------------- Ctrib_N_CB Ctrib_Y_CB
+Max
+Len Description
+----- ----------------------------------------------------------
+1 "No Campaign Contributions Made" check-box 1 "Part IV completed and Attached" check-box
+43 C 44 C 45 O 46 O
+47 C 48 C
+Major_NamL Major_NamF Major_NamT Major_NamS
+RcpCmte_Nm RcpCmte_ID
+200 Major Donor Last Name (Part IV; Section A) 45 Major Donor First Name(s)
+10 Major Donor Prefix or Title
+10 Major Donor Suffix
+200 Recipient Committee Name(Part IV; Section A) 9 Recipient Cmtte (or Major Donor) ID# (Part IV;
+Lby_Actvty
+400 Description of Lobbying Activity -- Refer to Overview for instructions on coding this field.
+42 R
+------ If applicable, give Major Donor Name or Recipient Committee & ID
+Sec A)
+------ Variable F645 fields follow when Form_Type=F645 ------------------------
+R{x} # C{x}
+--- ----
+40 O
+41 O
+42 R
+Field Name ---------------- Ctrib_N_CB Ctrib_Y_CB Lby_Actvty
+Max
+Len Description
+----- ----------------------------------------------------------
+1 "No Campaign Contributions Made" check-box 1 "Part III completed and Attached" check-box 400 Description of Lobbying Activity -- Refer to
+Overview for instructions on coding this field. ------ If applicable, give Major Donor Name or Recipient Committee & ID
+43 C 44 C 45 O 46 O 47 C 48 C
+Major_NamL Major_NamF Major_NamT Major_NamS RcpCmte_Nm RcpCmte_ID
+200 Major Donor Last Name (Part III; Section A) 45 Major Donor First Name(s)
+10 Major Donor Prefix or Title
+10 Major Donor Suffix
+200 Recipient Committee Name (Part III; Section A) 9 Recipient Cmtte (or Major Donor) ID# (Part IV;
+Sec A)
+Note: F625 Part I and F635 Part II Name & Title information for Partners,
+Owners, Officers and Employees (PTN,OWN,OFF,EMP) is coded on CVR2 records with CVR2.Entity_Cd = [PTN|OWN|OFF|EMP].
+Page 72 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE ({2} ADDITIONAL NAMES/COMMITTEES) RECORD LAYOUT
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Note: Remainder of CVR2 record is parsed depending on value of Form_Type. ------ Following variable fields used when Form_Type=[F625|F635] -------------
+R{x} # C{x}
+--- ----
+04 Rx
+Field Name ----------------
+Entity_Cd
+Max
+Len Description
+----- ----------------------------------------------------------
+3 Values: PTN - Partner OWN - Owner
+OFF - Officer EMP - Employee
+Field Name ----------------
+Rec_Type Form_Type
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: CVR2
+4 Form_Type
+(must equal Form_Type in CVR record) Values: F625; F635
+Tran_ID
+20 Transaction ID - permanent value unique to this item
+05 C
+Note: Required on F625 when CVR.40.Part_1_1='X'
+06 R
+07 R
+08 O
+09 O
+10 C
+Enty_NamL 200 Enty_NamF 45 Enty_NamT 10
+Enty_NamS 10 Enty_Title 45
+Partner, Owner, Officer, Employee Last name Partner, Owner, Officer, Employee First name Partner, Owner, Officer, Employee Prefix or Title
+Partner, Owner, Officer, Employee Suffix Title of Entity Named above (Req. on F635 only)
+Entity_ID
+9 ID# of Entity (Partner, Owner, Officer, Employee)
+if that entity is required to file Form 615.
+Page 73 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 Rx
+05 Rx
+06 O
+07 O
+08 Rx
+R{x}
+# C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 O
+AMENDMENT INFORMATION (a.k.a.. Form 690; Part II)
+Field Name ---------------- Rec_Type
+Form_Type
+Exec_Date
+From_Date Thru_Date
+Chg_Parts Chg_Sects Amend_Txt1
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: F690
+4 Form_Type (must equal Form_Type in CVR record) Values: F615; F625; F635; F645
+8 Date the original report (or prior amendment to the original report) was executed on
+8 Report Period From Date of Original Report
+8 Report Period To/Through Date of Original Report
+100 Amended info affects items on Part(s)
+100 Amended info affects items on Section(s)
+330 Description of changes
+(6 lines of 55 char 9pt text)
+Field Name ---------------- Rec_Type Form_Type Line_Item Amount_A
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: SMRY
+8 Name of Filing Form or Schedule Name
+8 Line Number of Summary T otal
+12 Summary Amount (Amount this Period)
+SUMMARY TOTALS RECORD LAYOUT
+ Note: Amount(s) may have a null or zero value if there is no dollar total to be conveyed. SMRY records with null/zero Amount(s) do not have to be coded within a filing. Amount(s) are assumed to be zero in the absence of a SMRY record.
+Page 74 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ Examples:
+F615 Lobbyist Report does not have any summary (SMRY) totals.
+F625 SMRY records (when needed) are coded with these Form_Type/Line# values: SMRY line
+  SMRY,F625,A,Amt_A SMRY,F625,B,Amt_A SMRY,F625,C,Amt_A SMRY,F625,D,Amt_A
+SMRY,F625P2,0,Amt_A SMRY,F625P3A,1,Amt_A SMRY,F625P3A,2,Amt_A SMRY,F625P3A,3,Amt_A SMRY,F625P3B,0,Amt_A
+{no Part 2 line-item# on form, code Line_Item=0 (zero)}
+{no Part 3b line-item# on form, code Line_Item=0 (zero)} F635(including F640) SMRY records are coded with these Form_Type/Line# values:
+SMRY line
+SMRY,F635,A,Amt_A SMRY,F635,B,Amt_A SMRY,F635,C,Amt_A SMRY,F635,D,Amt_A SMRY,F635,ABCD,Amt_A SMRY,F635,E,Amt_A
+SMRY,F635P3A,1,Amt_A
+SMRY,F635P3A,2,Amt_A
+SMRY,F635P3B,0,Amt_A {no Part 3b line-item# on form, code Line_Item=0 (zero)} SMRY,F635P3C,0,Amt_A {no Part 3c line-item# on form, code Line_Item=0 (zero)} SMRY,F635P3D,1,Amt_A
+SMRY,F635P3D,2,Amt_A
+SMRY,F635P3D,3,Amt_A
+SMRY,F635P3E,0,Amt_A {no Part 3e line-item# on form, code Line_Item=0 (zero)}
+SMRY,S640,1,Amt_A SMRY,S640,2,Amt_A SMRY,S640,3,Amt_A SMRY,S640,4,Amt_A SMRY,S640,5,Amt_A
+ Page 75 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016 F645(including F640) SMRY records are coded with these Form_Type/Line# values:
+SMRY line
+SMRY,F645,A,Amt_A SMRY,F645,B,Amt_A SMRY,F645,AB,Amt_A SMRY,F645,C,Amt_A
+SMRY,F645P2A,0,Amt_A {no Part 2a line-item# on form, code Line_Item=0 (zero)} SMRY,F645P2B,1,Amt_A
+SMRY,F645P2B,2,Amt_A
+SMRY,F645P2B,3,Amt_A
+SMRY,F645P2C,0,Amt_A {no Part 2c line-item# on form, code Line_Item=0 (zero)}
+SMRY,S640,1,Amt_A SMRY,S640,2,Amt_A SMRY,S640,3,Amt_A SMRY,S640,4,Amt_A SMRY,S640,5,Amt_A
+ACTIVITY EXPENDITURE SCHEDULES: (F615P1; F625P3A; F635P3C; F645P2A)
+   # C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+Field Name Len ---------------- ----- Rec_Type 4
+Form_Type 7
+Tran_ID 20 RecSubType 1
+Description ---------------------------------------------------------- Record Type Value: LEXP
+Schedule Name/ID Values:
+F615P1 = F615/Part 1 - Activity Expenses F625P3A = F625/Part 3A - Activity Expenses F635P3C = F635/Part 3C - Activity Expenses F645P2A = F645/Part 2A - Activity Expenses
+Transaction ID - permanent value unique to this item
+1 = Main Item Entry (Date and Amount are required)
+2 = Subsequent detail of additional Beneficiary info
+R{x} Max
+Page 76 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ACTIVITY EXPENDITURE SCHEDULES: (cont.)
+ # C{x} --- ----
+05 R
+06 R
+07 C
+08 O
+09 O
+10 R
+11 O
+12 R
+13 R
+14 R
+15 O
+16 R
+17 R
+18 R
+19 R
+20 C
+21 C
+22 O
+23 O
+24 O
+Field Name Len ---------------- -----
+Entity_Cd 3
+Payee_NamL 200 Payee_NamF 45 Payee_NamT 10 Payee_NamS 10 Payee_Adr1 55 Payee_Adr2 55 Payee_City 30 Payee_ST 2 Payee_ZIP4 10
+CredCardCo 200
+Bene_Name 90 Bene_Posit 90 Bene_Amt 12 Expn_Dscr 90
+Date 8 Amount 12
+Memo_Code 1 Memo_RefNo 20 BakRef_TID 20
+Description ----------------------------------------------------------
+Entity Code of the Payee
+Values: IND - Individual;
+OTH - Other (e.g. a Business, Org, ...)
+Payee's Last name
+Payee's First name (Req if 'IND') Payee's Prefix or Title
+Payee's Suffix
+Address of Payee
+Optional 2nd line of Address
+City
+State code
+Zip+4
+Name of Credit Card Company (if paid by Credit Card)
+Name of Reportable Person Benefiting Official Position of Person Benefiting Amount Benefiting Beneficiary Description of Consideration
+Date of Expenditure
+(Only when RecSubType=1) Amount of Payment
+(Only when RecSubType=1)
+Memo Amount?
+(Date/Amount are informational only) Reference to text contained in a TEXT record.
+Back Reference to a Tran_ID of a "parent" record
+R{x} Max
+Page 77 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ PAYMENTS MADE/RECEIVED TO/FROM LOBBYING FIRMS SCHEDULES: (F625P2; F635P3B)
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 R
+06 O
+07 O
+08 O
+09 R
+10 O
+11 R
+12 R
+13 R
+14 C
+Field Name ---------------- Rec_Type
+Form_Type
+Tran_ID Entity_Cd
+Emplr_NamL Emplr_NamF
+Emplr_NamT
+Emplr_NamS
+Emplr_Adr1 Emplr_Adr2 Emplr_City Emplr_ST Emplr_ZIP4 Emplr_Phon
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: LPAY
+7 Schedule Name/ID Value:
+F625P2 = F625/Part 2 - Paymts Rcvd for Lobby Activity
+F635P3B = F635/Part 3B - Payments to Lobbying Firms
+20 Transaction ID - permanent value unique to this item
+3 Entity Code of the Employer Values: FRM - Lobbying Firm
+LEM - Lobbying Employer LCO - Lobbying Coalition
+200 Name of Firm, Employer, Coalition 45 Employer First name
+(never a person / not used) 10 Employer Prefix or Title
+(never a person / not used)
+10 Employer Suffix (never a person / not used)
+55 Address of Firm, Employer, Coalition 55 Optional 2nd line of Address
+30 City
+2 State code
+10 Zip+4
+20 Phone Number (Req if F625/Part2
+(if Form_Type=F625P2))
+15 C
+Note: See Overview for instructions on coding this field.
+------ Any one out of the following 3 Amounts are required ------
+16 C
+17 C
+18 C
+Fees_Amt 12 Reimb_Amt 12 Advan_Amt 12
+Fees and Retainers Amount Reimbursements of Expenses Amount Advance & Other Payments Amount
+Lby_Actvty
+200 Description of Lobbying Activity (Req only on F625P2)
+Page 78 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ PAYMENTS MADE/RECEIVED TO/FROM LOBBYING FIRMS SCHEDULES: (Cont.)
+ R{x} # C{x}
+--- ----
+19 C
+20 R
+21 R
+22 O
+23 O
+24 O
+Field Name ----------------
+Advan_Dscr
+Per_T otal Cum_Total
+Memo_Code Memo_RefNo BakRef_TID
+Max
+Len Description
+----- ----------------------------------------------------------
+100 Description of Advance and Other Payments (Required if Advan_Amt is non-zero)
+12 T otal this {reporting} Period 12 Cumulative T otal to Date
+1 Memo Amount?
+(Date/Amount are informational only)
+20 Reference to text contained in a TEXT record.
+20 Back Reference to a Tran_ID of a "parent" record
+# C{x} --- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 R
+06 O
+07 R
+08 R
+09 R
+10 R
+11 R
+12 O
+Field Name Len ---------------- ----- Rec_Type 4
+Form_Type 7
+Tran_ID 20
+Firm_Name 200 Firm_Adr1 55 Firm_Adr2 55 Firm_City 30 Firm_ST 2 Firm_ZIP4 10 Firm_Phon 20
+Subj_NamL 200 Subj_NamF 45
+Description ---------------------------------------------------------- Record Type Value: LOTH
+Schedule Name/ID Values:
+F625P3B = F625/Part 3B - Paymts to OTHER Lobby Firms
+Transaction ID - permanent value unique to this item
+Name of Firm
+Address of Firm
+Optional 2nd line of Address City
+State code
+Zip+4
+Phone Number
+Last Name of Employer/Client subject of lobbying
+First Name of Employer/Client subject of lobbying
+PAYMENT TO OTHER LOBBYING FIRMS: (F625P3B)
+ R{x} Max
+Page 79 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ PAYMENT TO OTHER LOBBYING FIRMS: (F625P3B) Cont.
+ R{x} # C{x}
+--- ----
+13 O
+14 O
+15 O
+16 R
+17 R
+18 O
+19 O
+Field Name ----------------
+Subj_NamT Subj_NamS
+Date Amount Cum_Amt
+Memo_Code
+Memo_RefNo
+Max
+Len Description
+----- ----------------------------------------------------------
+10 Prefix/Title of Employer/Client subject of lobbying
+10 Suffix of Employer/Client subject of lobbying
+8 Date of Payment (Does not show on form) 12 Amount of Payment
+12 Cumulative T otal to Date
+1 Memo Amount?
+(Date/Amount are informational only)
+20 Reference to text contained in a TEXT record.
+CAMPAIGN CONTRIBUTIONS SCHEDULES: (F615P2; F625P4B; F635P4B; F645P3B)
+  R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 R
+05 R
+06 O
+07 O
+08 O
+Field Name ---------------- Rec_Type
+Form_Type
+Tran_ID Entity_Cd
+Recip_NamL Recip_NamF Recip_NamT Recip_NamS
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: LCCM
+7 Schedule Name/ID Values:
+F615P2 = F615/Part 2 - Campaign Contrib F625P4B = F625/Part 4B - Campaign Contrib F635P4B = F635/Part 4B - Campaign Contrib F645P3B = F645/Part 3B - Campaign Contrib
+20 Transaction ID - permanent value unique to this item
+3 Entity Code for Recipient of the Campaign Contribution Value: COM - Recipient Committee
+200 Name of Recipient of Campaign Contribution 45 Recipient's First name
+10 Recipient's Prefix or Title
+10 Recipient's Suffix
+appear on any forms, they are optional Page 80 of 95
+------ These Address fields do not
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ 15 C 16 O 17 O 18 O 19 C
+20 C 21 C
+22 O 23 O 24 O
+Ctrib_NamL Ctrib_NamF Ctrib_NamT Ctrib_NamS Acct_Name
+Date Amount
+Memo_Code Memo_RefNo BakRef_TID
+200 Contributor's Last name (If other than Lobbyist) 45 Contributor's First name
+10 Contributor's Prefix or Title
+10 Contributor's Suffix
+90 Name of Separate Account (If applicable)
+8 Date of Contribution 12 Amount of Contribution
+1 Memo Amount?
+(Date/Amount are informational only)
+20 Reference to text contained in a TEXT record.
+20 Back Reference to a Tran_ID of a "parent" record
+CAMPAIGN CONTRIBUTIONS SCHEDULES: (Cont.)
+ R{x} # C{x}
+--- ----
+09 O
+10 O
+11 O
+12 O
+13 O
+14 R
+------ Contributor Name and Separate Account only apply to F615 filings
+Field Name ----------------
+Recip_Adr1 Recip_Adr2 Recip_City Recip_ST Recip_ZIP4
+Max
+Len Description
+----- ----------------------------------------------------------
+55 Address of Recipient
+55 Optional 2nd line of Address 30 City
+2 State code
+10 Zip+4
+Recip_ID
+9 ID# of Recipient
+ATTACHMENT SCHEDULES FOR PAYMENTS: (S630; S635-C; S640)
+R{x} Max
+# C{x} Field Name
+--- ---- ----------------
+01 Rx Rec_Type 4
+02 Rx Form_Type 6
+ Len Description
+----- ----------------------------------------------------------
+Record Type Value: LATT
+Schedule Name/ID Values:
+S630 = Payments Made to Lobbying Coalitions S635-C = Payments Rcvd by Lobbying Coalitions
+S640 = Other Payments to Influence
+Page 81 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ ATTACHMENT SCHEDULES FOR PAYMENTS: (S630; S635-C; S640) Cont.
+ # C{x} --- ----
+03 Rx
+04 R
+05 R
+Field Name Len ---------------- -----
+Tran_ID 20 Entity_Cd 3
+Recip_NamL 200
+Description ----------------------------------------------------------
+Transaction ID - permanent value unique to this item
+Entity Code of the Payment Recipient/Payee Values: FRM - Lobbying Firm;(S635-C|S640) LEM - Lobbying Employer; (S635-C|S640) LCO - Lobbying Coalition; (S630|S635-C) LBY - Lobbyist (a person); (S635-C)
+IND - Individual; (S635-C|S640)
+OTH - Other (Bus,Org,etc.) (S635-C|S640)
+Recipient/Payee's Last name
+(S640) - First 6 characters MUST contain string:
+“[@] – “ representing “Payment Purpose” Valid values for ‘@’ (Cal Code Regs. 18616): S – Salary and compensation of employees... E – Expenses incurred by a lobbyist...
+L – Legislative related services...
+C – Consultants and governmental relations... P – Public affairs...
+A – Advertising...
+R – Research...
+V – Lobbying events...
+O – All other payments...
+Recipient/Payee's First name (Req if 'LBY' or 'IND') Recipient/Payee's Prefix or Title Recipient/Payee's Suffix
+Address of Recipient/Payee Optional 2nd line of Address City
+State code
+R{x} Max
+             06 C
+07 O
+08 O
+09 R
+10 O
+11 R
+12 R
+13 R
+14 O
+15 R
+Recip_NamF 45
+Recip_NamT 10 Recip_NamS 10
+Recip_Adr1 55 Recip_Adr2 55 Recip_City 30 Recip_ST 2 Recip_ZIP4 10
+Date 8 Amount 12
+Zip+4
+Date of Payment Amount of Payment
+(Does not show on form)
+Page 82 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ 16 R
+17 O
+18 O
+19 O
+Cum_Amt CumBeg_Dt
+Memo_Code Memo_RefNo
+12 Cumulative Total to Date
+8 Cumulative Period Begin Date (This field is not used)
+1 Memo Amount? (Date/Amount are informational only)
+20 Reference to text contained in a TEXT record.
+Page 83 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ *************************************************************** * Section 4 - Lobbyist Statements * ***************************************************************
+F601 Lobbying Firm Registration Statement
+F602 Lobbying Firm Activity Authorization
+F603 Lobbyist Employer or Lobbying Coalition Registration Statement
+F604 Lobbyist Certification Statement
+F605* Amendment to Registration, Lobbying Firm, Lobbyist Employer,
+Lobbying Coalition F606 Notice of Termination F607 Notice of Withdrawal
+* The 605 is not filed as a stand-alone filing. Instead
+it is included within the 601 and 603 Registration filings.
+Electronic File Components by Filing Type
+ RecType FormName
+HDR CAL CVR F601 CVR2 F601 F605 F601 LEMP F601P2A LEMP F601P2B
+HDR CAL CVR F602 CVR2 F602
+RecType FormName
+HDR CAL CVR F603
+CVR2 F603 F605 F603
+Description
+CAL Header record
+Cover Page Lobbying Firm Registration Statement Cover Page; Part I Individual Lobbyists Amendment information sheet (a.k.a. Form 605) Part II/Sec A Lobbyist Employers
+Part II/Sec B Subcontracted Clients
+"CAL" Header record
+Cover Page; Lobbying Firm Activity Authorization Cover Page; side 1: Names of Subcontracted Clients side 2: Names "50 or less" Assoc members
+Description
+"CAL" Header record
+Cover Page; Lobbyist Employer/Coalition Regis Stmt
+Cover Page; Names of Employees, Firms & Agencies
+Amendment Information sheet (a.k.a. Form 605)
+      Page 84 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ RecType FormName
+HDR CAL CVR F604
+HDR CAL CVR F606
+HDR CAL CVR F607
+Description
+"CAL" Header record
+Cover Page; Lobbyist Certification Statement
+"CAL" Header record
+Cover Page; Notice of Termination
+"CAL" Header record
+Cover Page; Notice of Withdrawal
+   COVER PAGE RECORD LAYOUT FOR: F601; F602; F603; F604; F606; F607
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ---------------- Rec_Type
+Form_Type
+Sender_ID
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: CVR
+4 Type of Filing or Form set.
+Values: F601; F602; F603; F604; F606; F607
+9 ID# of Lobbyist Entity that is SUBMITTING this report.
+Note: This is the ID# assigned by the SOS after the Lobbyist Entity first registers. Typically, it is the same as the Filer_ID except when a Firm is submitting a report on bahalf of another Lobbyist Entity.
+04 Rx Filer_ID 9 ID# of Lobbyist Entity that is SUBJECT of this report.
+Note: Sender and Filer ID# are not necessarily the same on F602, F604, F606 & F607 filings. However, they must always be equal on F601 and 603 reports.
+Note: The contents of this record (Name/Address/etc.) belong to the Lobbying Entity of the Filer_ID, NOT the Lobbying Entity of the Sender_ID.)
+05
+R Entity_Cd 3 Entity Code of the Filer Values:
+LBY - Lobbyist Person (F601,604,606,607)
+FRM - Lobbying Firm (F601,602,603,606) LEM - Lobbying Employer (F601,602,603,606) LCO - Lobbying Coalition (F601,602,603,606)
+COVER PAGE RECORD LAYOUT FOR: F601; F602; F603; F604; F606; F607
+ Page 85 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+06 Rx
+07 C
+08 O
+09 O
+10 Rx
+11 Rx
+12 R
+13 R
+14 O
+Note: this
+15 C
+16 R
+17 O
+18 R
+19 R
+20 R
+21 R
+22 O
+23 O
+24 O
+25 O
+26 C
+27 C
+28 C
+29 O
+30 R
+31 O
+Max
+Len Description
+----- ----------------------------------------------------------
+200 Lobbying Entity Name (or Lobbyist Person's Last Name)
+45 Lobbyist's First name (Req only if 'LBY') 10 Lobbyist's Prefix or Title
+10 Lobbyist's Suffix
+3 Report Number - Values: 000 - Original Report 001-999 - Amended Rpt #1-#999
+8 Date this report is filed
+4 Legislative Session Beginning Year 4 Legislative Session Ending Year
+Qual_Date
+date applies to F601, F603 and F604 forms
+Field Name ----------------
+Filer_NamL
+Filer_NamF Filer_NamT Filer_NamS
+Report_Num
+Rpt_Date
+LS_Beg_Yr LS_End_Yr
+Eff_Date
+Bus_Adr1 Bus_Adr2 Bus_City Bus_ST Bus_ZIP4 Bus_Phon Bus_FAX Bus_Email
+Mail_Adr1 Mail_Adr2 Mail_City Mail_ST Mail_ZIP4 Mail_Phon
+Sig_Date Sig_Loc
+8 Effective Date of Auth/Term (Req. F602,F606,F607)
+55 Business Address of Filer - Street 55 Business Address of Filer - Street 30 Business Address of Filer - City
+2 Business Address of Filer - State 10 Business Address of Filer - ZIP+4 20 Phone number
+20 Optional FAX number 60 Optional Email address
+55 Mail Address of Filer (if different) - 55 Mail Address of Filer (if different) - 30 Mail Address of Filer (if different) - 2 Mail Address of Filer (if different) - 10 Mail Address of Filer (if different) - 20 Mail Address of Filer (if different) -
+if
+1 2
+Street 1 Street 2 City State ZIP+4 Phone
+8 Date Qualified (when this is an initial registration)
+8 Date when signed
+45 City and State where signed (does not appear
+on forms)
+COVER PAGE RECORD LAYOUT FOR: F601; F602; F603; F604; F606; F607
+ Page 86 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+32 R
+33 R
+34 O
+35 O
+36 C
+37 C
+38 O
+39 O
+40 C
+------ Variable F601 field follows when Form_Type=F601 ------------------------ 41 R Stmt_Firm 90 Lobby Firm Name in "Statement of
+Responsible Officer"
+------ Variable F602/F603 fields follow when Form_Type=[F602|F603] ------------
+------ One and only one of the following 4 check-boxes should be checked ------
+41 C
+42 C
+43 C
+44 C
+45 C
+46 C
+47 O
+48 C
+49 C
+50 C
+51 C
+52 C
+Ind_CB Bus_CB Trade_CB Oth_CB
+A_B_Name A_B_Adr1 A_B_Adr2 A_B_City A_B_ST A_B_ZIP4
+Descrip_1
+Descrip_2
+1 Individual check-box
+1 Business check-box
+1 Industry/Trade/Professional check-box 1 Other check-box
+200 Name A. Individual or B. Business Entity
+55 Street 1 of A. Individual or B. Business Entity 55 Street 2 of A. Individual or B. Business Entity 30 City of A. Individual or B. Business Entity
+2 State of A. Individual or B. Business Entity 10 ZIP+4 of A. Individual or B. Business Entity
+300 Description of Business Activity, Industry or Other
+300 Description of specific or other lobbying interests
+Field Name ----------------
+Sig_NamL Sig_NamF Sig_NamT Sig_NamS
+Prn_NamL Prn_NamF
+Prn_NamT Prn_NamS
+Max
+Len Description
+----- ----------------------------------------------------------
+200 Signer "as signed" Last name 45 Signer "as signed" First name 10 Signer "as signed" Prefix or Title 10 Signer "as signed" Suffix
+200 Signer "as typed/printed" Last name (not on F604)
+45 Signer "as typed/printed" First name (not on F604)
+10 Signer "as typed/printed" Prefix or Title 10 Signer "as typed/printed" Suffix
+Sig_Title
+45 Title of Signer (not on F604)
+COVER PAGE RECORD LAYOUT FOR: F601; F602; F603; F604; F606; F607
+ Page 87 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+53 C
+54 C
+55 O
+Field Name ----------------
+C_Less50 C_More50
+Ind_Class
+Max
+Len Description
+----- ----------------------------------------------------------
+1 No. members in Industry Assoc - 50 or less
+1 No. members in Industry Assoc - More than 50
+3 Industry Classification Values: AGR - Agriculture
+EDU - Education GOV - Government HEA - Health
+LAB - Labor Unions LEG - Legal
+PUB - Public Employee
+POL - Political Organizations UTL - Utilities
+OTH - Other
+100 Description of Industry Classification if [OTH]er
+3 Business Classification (Req if Ind_Class is blank)
+Values: ENT - Entertainment FIN - Finance/Insurance
+LOG - Lodging/Restaurants MAN - Manufacturing/Industrial MER - Merchandise/Retail
+OIL - Oil & Gas
+PRO - Professional/Trade REA - Real Estate
+TRN - Transportation OTH - Other
+56 C
+57 C
+Ind_Descr Bus_Class
+100 Description of Business Classification if [OTH]er
+58 C
+------ Additional variable F602 fields follow when Form_Type=F602 -------------
+59 R
+60 R
+61 O
+62 R
+Auth_Name Auth_Adr1 Auth_Adr2 Auth_City
+200 Name authorized of Lobbying Firm 55 Street 1 of Filer
+55 Street 2 of Filer
+30 City 1 of Filer
+Bus_Descr
+COVER PAGE RECORD LAYOUT FOR: F601; F602; F603; F604; F606; F607
+ Page 88 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ # ---
+63 64
+59 60
+R{x}
+C{x} Field Name ---- ----------------
+R Auth_ST R Auth_ZIP4
+Max
+Len Description
+----- ----------------------------------------------------------
+2 State of Filer 10 ZIP+4 of Filer
+45 C
+46 C
+47 C
+48 C
+Lby_Reg_CB 1 Lby_604_CB 1
+St_Leg_YN 1 St_Agency 100
+Lobby agcy in 601/603 Reg Stmt check-box #1 Lobby agcy in this 604 Stmt check-box #2
+Will Lobby State Legislature? Y/N (Req if Lby_604_CB=X)
+List of Identified State Agencies (Req if Lby_604_CB=X)
+------ Additional Variable F603 fields follow when Form_Type=F603 -------------
+R Lobby_Int 300 Description of Part III Lobbying Interests
+R Influen_YN 1 Attempt to Influence State Legislation? Yes/No
+------ Variable F604 fields follow when Form_Type=F604 ------------------------
+41 R Firm_Name 200 Name of Lobbyist Employer or Lobbying Firm ------ Only ONE of the next three fields (check-boxes/Date) should be coded ---
+42 C
+43 C
+44 C
+NewCert_CB 1 RenCert_CB 1 Complet_Dt 8
+Will take a New Cert check-box "check-circle" #1
+Will take a Renewal Cert check-box "check-circle" #2
+Ethics Orient Course Completion (Req if NewCert_CB and RenCert_CB are both blank)
+------ Only ONE of the following 2 check-boxes should be checked --------------
+------ Variable F606/F607 fields follow when Form_Type=[F606|F607] ------------
+41 R
+42 C
+43 C
+------ At least one of above two check-boxes must be used on F607 filings -----
+Firm_Name 200 Lobby_CB 1 L_Firm_CB 1
+Name of Lobbyist Employer or Lobbying Firm
+"Lobbyist within the meaning ..." check-box (F607 only) "Lobbying firm within the ..." check-box (F607 only)
+Page 89 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016
+ COVER PAGE ({2} ADDITIONAL NAMES/COMMITTEES) RECORD LAYOUT
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+Field Name ----------------
+Rec_Type Form_Type
+Tran_ID
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: CVR2
+4 Form_Type
+(must equal Form_Type in CVR record) Values: F601; F602; F603
+20 Transaction ID - permanent value unique to this item
+Note: Remainder of CVR2 record is parsed depending on value of Form_Type. ------ Following variable fields used when Form_Type=[F601|F602] -------------
+R{x} # C{x}
+--- ----
+04 Cx
+Field Name ----------------
+Entity_Cd
+Max
+Len Description
+----- ----------------------------------------------------------
+3 Values:
+SCL - Subcontracted Client (F602,Cover/side1) MBR - Association member(F602,Cover/side2) Null - Entity_Cd not required on Form 601
+06 R Enty_NamL 200
+07 C Enty_NamF 45
+08 O Enty_NamT 10
+09 O Enty_NamS 10
+Lobbyist/Subcontracted Client/Assoc Member Last name
+Lobbyist/Assoc Member First name
+(Req if NOT 'SCL')
+Lobbyist/Assoc Member Prefix/Title Lobbyist/Assoc Member Suffix
+9 ID# of Entity (Partner, Owner, Officer, Employee) on a F601 Part 1 (This person must also file a 604).
+05 C
+Note: Entity_ID is required for F601 filings; (i.e. when Entity_Cd not = 'SCL' or 'MBR')
+Entity_ID
+COVER PAGE ({2} ADDITIONAL NAMES/COMMITTEES) RECORD LAYOUT
+ Page 90 of 95
+
+Document Id: CAL format 2.20 Date: 07/01/2016 ------ Following variable fields used when Form_Type=F603 --------------------
+ R{x} # C{x}
+--- ----
+04 Rx
+05 C
+Field Name ----------------
+Entity_Cd
+Entity_ID
+Max
+Len Description
+----- ----------------------------------------------------------
+3 Values:
+FRM - Lobbying Firm (Right Col of Part I) EMP - Employee Lobbyist (Left side of Part I) AGY - State Agency (Listed in Part II)
+9 ID# of Entity
+(Lobbying Firm or Employee Lobbyist)
+Note: On a F603 (Employee Lobbyist must also file a 604).
+Note: Entity_ID is required for F603 filings; (i.e. when Entity_Cd = 'FRM' or 'EMP')
+06 R
+07 C
+08 O
+09 O
+R{x}
+# C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 Rx
+05 Rx
+Enty_NamL Enty_NamF Enty_NamT Enty_NamS 10
+06 O 07 C 08 C
+Add_L_CB Add_L_Eff A_L_NamL
+1 Add Lobbyist check-box
+8 Add Lobbyist Effective Date
+200 Add Lobbyist Last Name (1st one changed)
+200 Lobbying Entity or State Agency Last name
+45 Lobbying Entity First name (Req only if 'EMP')
+10
+Lobbying Entity Prefix or Title
+AMENDMENT INFORMATION (a.k.a.. Form 605; Part I)
+ Field Name ---------------- Rec_Type Form_Type
+Exec_Date From_Date Thru_Date
+Max
+Len Description
+----- ---------------------------------------------------------- 4 Record Type Value: F605
+4 Form_Type
+(must equal Form_Type in CVR record) Values: F601; F603
+8 Date this Amendment executed on
+8 Report Period From Date of Original Report 8 Report Period To/Through Date of Original
+Report
+------ At least one of the Check-boxes below must be "checked"
+AMENDMENT INFORMATION (a.k.a.. Form 605; Part I) Cont.
+ Page 91 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+09 C
+10 O
+11 O
+12 O
+13 C
+14 C
+15 C
+16 O
+17 O
+18 O
+19 C
+20 C
+21 O
+22 O
+23 O
+24 O
+25 C
+26 C
+27 O
+28 O
+29 O
+30 O
+31 C
+32 C
+33 O
+34 C
+35 C
+Field Name ----------------
+A_L_NamF A_L_NamT A_L_NamS Del_L_CB Del_L_Eff D_L_NamL D_L_NamF D_L_NamT D_L_NamS
+Add_LE_CB Add_LE_Eff A_LE_NamL
+A_LE_NamF A_LE_NamT A_LE_NamS
+Del_LE_CB Del_LE_Eff D_LE_NamL
+D_LE_NamF D_LE_NamT D_LE_NamS
+Add_LF_CB Add_LF_Eff A_LF_Name Del_LF_CB Del_LF_Eff D_LF_Name
+Max
+Len Description
+----- ----------------------------------------------------------
+45 Add Lobbyist First Name (1st one changed) 10 Add Lobbyist Prefix/Title (1st one changed) 10 Add Lobbyist Suffix (1st one changed)
+1 Delete Lobbyist check-box
+8 Delete Lobbyist Effective Date
+200 Delete Lobbyist Last Name (1st one changed) 45 Delete Lobbyist First Name (1st one changed) 10 Delete Lobbyist Prefix/Title (1st one changed) 10 Delete Lobbyist Suffix (1st one changed)
+1 Add Lobbyist Employer check-box
+8 Add Lobbyist Employer Effective Date 200 Add Lobbyist Employer Last Name
+(1st one changed)
+45 Add Lobbyist Employer First Name
+(1st one changed)
+10 Add Lobbyist Employer Prefix/Title
+(1st one changed)
+10 Add Lobbyist Employer Suffix
+(1st one changed)
+1 Delete Lobbyist Employer check-box
+8 Delete Lobbyist Employer Effective Date 200 Delete Lobbyist Employer Last Name
+(1st one changed)
+45 Delete Lobbyist Employer First Name
+(1st one changed)
+10 Delete Lobbyist Employer Prefix/Title
+(1st one changed)
+10 Delete Lobbyist Employer Suffix
+(1st one changed)
+1 Add Lobbying Firm check-box
+8 Add Lobbying Firm Effective Date
+200 Add Lobbying Firm Name (first one changed) 1 Delete Lobbying Firm check-box
+8 Delete Lobbying Firm Effective Date
+200 Delete Lobbying Firm Name
+(first one changed)
+AMENDMENT INFORMATION (a.k.a.. Form 605; Part I) Cont.
+ Page 92 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+36 O
+37 C
+38 C
+39 O
+40 O
+Field Name ----------------
+Other_CB Other_Eff Other_Desc
+F606_Yes F606_No
+Max
+Len Description
+----- ----------------------------------------------------------
+1 Other Amendments check-box
+8 Other Amendments Effective Date 100 Description of changes.
+1 Lobbyist ceasing all activities (Form 606) 1 Lobbyist ceasing employment,
+but remains active
+LOBBYIST EMPLOYERS/SUBCONTRACTED CLIENTS: (F601P2A; F601P2B)
+ R{x} # C{x}
+--- ----
+01 Rx
+02 Rx
+03 Rx
+04 O
+Field Name ----------------
+Rec_Type Form_Type
+Tran_ID Client_ID
+Max
+Len Description
+----- ----------------------------------------------------------
+4 Record Type Value: LEMP
+7 Schedule Name/ID Values:
+F601P2A = F601/Part 2A - Client / Employer F601P2B = F601/Part 2B - Subcontract Client
+20 Transaction ID - permanent value unique to this item
+9 ID# of Part 2A Employer or Part 2B
+Note: This entity must also file a 602
+Client/Employer
+05 R
+06 O
+07 O
+08 O
+09 R
+10 O
+11 R
+12 R
+13 R
+14 R
+15 R
+Cli_NamL Cli_NamF Cli_NamT Cli_NamS Cli_Adr1 Cli_Adr2 Cli_City Cli_ST Cli_ZIP4 Cli_Phon
+Eff_Date
+200 Last Name of [Employing] Client 45 First Name of [Employing] Client 10 Prefix or Title of [Employing] Client 10 Suffix of [Employing] Client
+55 Address of [Employing] Client 55 Optional 2nd line of Address 30 City
+2 State code
+10 Zip+4
+20 Phone number
+8 Effective Date of Lobbying Contract
+LOBBYIST EMPLOYERS/SUBCONTRACTED CLIENTS: (F601P2A; F601P2B)
+ Page 93 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ R{x} # C{x}
+--- ----
+16 R
+17 R
+18 R
+Field Name ----------------
+Con_Period AgencyList Descrip
+Max
+Len Description
+----- ----------------------------------------------------------
+30 Period of Contract
+200 Agencies to be Lobbied
+100 Description of Employer/Client Lobbying
+Interests
+------ Following fields required for Form_Type=F601P2B -----------------------
+19 O SubFirm_ID 9 ID# of Part 2b Subcontracting Lobbying Firm Note: This entity must also file a 602
+20 C
+21 C
+22 O
+23 C
+24 C
+25 C
+26 C
+Sub_Name 200 Sub_Adr1 55 Sub_Adr2 55 Sub_City 30 Sub_ST 2 Sub_ZIP4 10 Sub_Phon 20
+Name of Subcontracting Lobbying Firm Address of Subcontracting Lobbying Firm Optional 2nd line of Address
+City
+State code Zip+4
+Phone number
+Page 94 of 95
+
+Document Id: CAL format 2.20
+Date: 07/01/2016
+ Index Table
+ Addresses, 8, 21, 58
+Amendments, 2, 4, 20, 25, 65, 66, 72,
+81, 88, 90
+Amounts, 13, 47, 48, 76 Back-Referencing, 2
+Campaign, 2, 3, 4, 17, 19, 20, 23, 26,
+64, 65, 66, 69, 70, 78
+Child Records, 2, 18, 20
+Codes, 2, 9, 10, 11, 14
+Components, 19, 58, 65, 81
+CVR, 2, 5, 6, 9, 11, 14, 19, 20, 21, 22,
+26, 29, 31, 34, 35, 58, 59, 62, 64, 65,
+66, 71, 72, 81, 82, 87, 88
+CVR2, 5, 6, 10, 15, 19, 20, 21, 28, 30,
+31, 32, 58, 60, 61, 62, 65, 66, 70, 71,
+81, 87
+CVR3, 5, 11, 15, 19, 20, 21, 28, 34, 58,
+64
+Dates, 2, 6
+DEBT, 17, 20, 45
+EXPN, 5, 11, 17, 20, 21, 42
+F401, 9, 19, 22, 23, 26, 34, 37, 40, 52,
+57
+F410, 4, 9, 10, 31, 58, 59, 60, 61, 62,
+63, 64
+F425, 9, 10, 19, 22, 23, 26, 31, 32, 34 F450, 9, 10, 20, 22, 23, 24, 25, 26, 31,
+32, 34, 35, 36, 42, 43, 44
+F450P5, 14, 18, 20, 42, 43, 44
+F460, 4, 5, 9, 10, 13, 14, 15, 16, 17, 18,
+19, 20, 22, 23, 24, 25, 26, 27, 31, 32,
+33, 34, 35, 36, 37, 43, 48 F461, 4, 19, 26, 36
+F465, 4, 19, 21, 23, 27, 37 F470, 19, 32
+F495, 9, 20, 23, 35
+F496, 4, 9, 19, 21, 22, 23, 24, 25, 27, 53 F497, 4, 9, 19, 21, 22, 23, 24, 25, 26,
+54, 55
+F498, 4, 19, 23, 56, 57
+F601, 10, 31, 81, 82, 83, 84, 85, 86, 87,
+88, 90
+F602, 10, 31, 81, 82, 83, 84, 85, 86, 87 F603, 10, 31, 81, 82, 83, 84, 85, 86, 87,
+88
+F604, 81, 82, 83, 84, 85, 86
+F605, 81, 88
+F606, 10, 81, 82, 83, 84, 85, 86, 90 F607, 10, 81, 82, 83, 84, 85, 86
+HDR, 2, 5, 19, 20, 21, 58, 65, 66, 81, 82 Header Record Layout, 5
+LOAN, 11, 17, 20, 47, 48, 49, 50 Lobbyist, 2, 4, 10, 11, 17, 65, 66, 67, 68,
+73, 79, 80, 81, 82, 83, 86, 87, 88, 89,
+90
+Names, 7, 21, 58, 81
+Notes, 2
+Percents, 7
+Rates, 2, 7
+RCPT, 5, 11, 17, 18, 19, 20, 21, 37 S497, 21, 54
+SMRY, 5, 19, 20, 21, 35, 36, 37, 65, 66,
+72, 73, 74
+Split Records, 18, 20, 41, 44, 50
+SPLT, 18, 20, 41, 44, 50
+TEXT, 15, 16, 40, 44, 46, 49, 52, 53, 55,
+57, 75, 77, 78, 79, 80
+TRAN, 18
+Year, 6, 47, 48, 64, 83
+Yes/No Pairs, 6, 8, 9, 33, 61, 86 Zip Codes, 8
+Page 95 of 95
+
+</body></html>
