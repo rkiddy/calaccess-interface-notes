@@ -6,8 +6,8 @@ Document Id: CAL format 2.20 <br/>
 Date: 07/01/2016
 </h2>
 
+<h2 align="center">TABLE OF CONTENTS</h2>
 <pre>
-TABLE OF CONTENTS
 
 Overview
 List of Campaign Forms Available for Electronic Filing
@@ -36,11 +36,14 @@ Section 4 - Lobbyist Statements (Org, Term, etc.)
 </pre>
 <p>
 In accordance with the requirements of SB 49, the Secretary of State (SOS) is required to define a standardized record format or formats for transmission by the filing community of data required to be filed electronically under SB 49. The SOS will accept test files from vendors to ensure compliance and compatibility with these formats, and publish a list of the certified vendors or other parties who have successfully filed test reports with us.
-</p><p>
+</p>
+<p>
 This document contains the design definition of the California Electronic Filing Format for the electronic filing of California campaign and lobbying disclosure documents. This format defines the order and contents of the electronic filing data files that will be accepted and processed by the State of California's (CAL-ACCESS) California Automated Lobbying And Campaign Contribution & Expenditure Search System. This filing format has been developed to meet the specific requirements of SB 49 to implement electronic filing of these documents and to disclose this data to the public over the Internet. The specific layout of the format is derived from the data requirements of the forms themselves and experience gained implementing this system in the past two years. Vendor feedback is welcome and has been solicited.
-</p><p>
+</p>
+<p>
 This filing format is being used as the basis for the design of the CAL-ACCESS system and will be used to receive filings from filing software that uses the ".CAL" format. Like all software development integration efforts of this type, it is anticipated that minor problems will be found with the format. Please submit problem reports related to any potential problems to the Political Reform Division at (916) 653-6224.
-</p><p>
+</p>
+<p>
 The filing format is in the public domain and is non-proprietary. There are no intellectual property limitations associated with the filing format. The format is administered by the Secretary of State and all changes or corrections to the format will be managed by the Secretary of State.
 </p>
 
@@ -89,11 +92,14 @@ LOBBYIST
 </pre>
 <p>
 The first record in a CAL file must be a short CSV (comma-separated-value) record identified with the text "HDR" in the first field and "CAL" in the second field. The rest of the fields contain information such as version numbers and software identification for the filing database program that created the electronic CAL filing. The layout of a HDR record is described on the next page.
-</p><p>
+</p>
+<p>
 The filing database program is responsible for creating the various record types described in this document. It will assemble them into a single (.CAL) file with a HDR record, immediately followed by a CVR (Cover) record, followed by a number of other record types (e.g. CVR2, CVR3, SMRY, RCPT, EXPN,...) as required by a particular type of filing. The specific record types that should be included after the HDR and CVR records of each type of filing (e.g. F460 F615, F625, F635,) are listed at the beginning of each of the four Filing Sections later in this document.
-</p><p>
+</p>
+<p>
 Note:  The following layouts use 'Rx', 'R', 'Cx' & 'C' to indicate if a field is (R)equired or (C)onditionally required. If required {or conditionally required} and data is missing, the 'x' indicates whether this results in a filing being "Rejected" by the agency.
-</p><p>
+</p>
+<p>
 'Rx' = (R)equired field; SOS "Rejects" filing  (Level-8)<br/>
 'R' = (R)equired field, but SOS "Accepts" filing (Level-4)<br/>
 'Cx' = (C)ond Required field; SOS "Rejects" filing  (Level-8)<br/>
@@ -116,122 +122,173 @@ Header Record Layout (common to all CAL filing types)
 </table>
 </p>
 
- NOTES ABOUT CERTAIN FIELD TYPES
-E.F (.CAL) files are not case sensitive. Rec_Type, Form_Type and all "code" fields (e.g. Entity_Cd, Yes/No fields, Check-box fields), can have values represented in any mix of UPPERCASE or lowercase letters." It is important that software that generates "CAL" files prevents any fields from containing "leading spaces" (e.g. " Text information" has a leading space before the word Text). Fields with leading spaces are not allowed.
-Each kind of record must be coded with the exact number of field delimiters necessary to define the number of fields as specified by this document. The number of fields required on CVR and CVR2 records depends on the Form_Type. All other records have field counts, which vary with the value of Rec_Type.
-DATES
-All 8 byte date fields must be in CCYYMMDD format. Dates are always coded as 8-digit fields in Century, Year, Month, & Day order.
-AMOUNTS
-Monetary amounts are stored with an "explicit" decimal point, which when coded, must be followed by 1 or 2 (but no more than 2) decimal positions. Embedded commas are not allowed and cause a filing to be rejected. Negative amounts can be represented with a leading hyphen (-) character.
-   Examples:
-123.45 - 345 - -567.8 - $1,234.00 -
-1234.00- -
-represents an amount of $123.45
-represents an amount of $345.00
-represents a negative amount of $567.80
-invalid & will be rejected (commas & other symbols not allowed)
-invalid & will be rejected (no trailing '-' signs allowed)
-Page 6 of 95
+<h2 align="center">NOTES ABOUT CERTAIN FIELD TYPES</h2>
 
-Document Id: CAL format 2.20 Date: 07/01/2016
- RATES & PERCENTS
+<p>
+E.F (.CAL) files are not case sensitive. Rec_Type, Form_Type and all "code" fields (e.g. Entity_Cd, Yes/No fields, Check-box fields), can have values represented in any mix of UPPERCASE or lowercase letters." It is important that software that generates "CAL" files prevents any fields from containing "leading spaces" (e.g. " Text information" has a leading space before the word Text). Fields with leading spaces are not allowed.
+</p>
+<p>
+Each kind of record must be coded with the exact number of field delimiters necessary to define the number of fields as specified by this document. The number of fields required on CVR and CVR2 records depends on the Form_Type. All other records have field counts, which vary with the value of Rec_Type.
+</p>
+<h2 align="center">DATES</h2>
+<p>
+All 8 byte date fields must be in CCYYMMDD format. Dates are always coded as 8-digit fields in Century, Year, Month, & Day order.
+</p>
+<h2 align="center">AMOUNTS</h2>
+<p>
+Monetary amounts are stored with an "explicit" decimal point, which when coded, must be followed by 1 or 2 (but no more than 2) decimal positions. Embedded commas are not allowed and cause a filing to be rejected. Negative amounts can be represented with a leading hyphen (-) character.
+</p>
+<p>
+Examples:
+<blockquote>
+123.45 - 345 - -567.8 - $1,234.00 -
+ -
+
+123.45 - represents an amount of $123.45<br/>
+345 - represents an amount of $345.00<br/>
+-567.8 - represents a negative amount of $567.80<br/>
+$1,234.00 - invalid & will be rejected (commas & other symbols not allowed)<br/>
+1234.00- - invalid & will be rejected (no trailing '-' signs allowed)
+</p>
+
+<h2 align="center">RATES & PERCENTS</h2>
+<p>
 Rates & Percents are expressed as "freeform" text. When a Loan is expressed in terms of a "rate", the value should be represented with an explicit decimal point (e.g. 0.056). If the same "rate" is expressed as a percentage, the % symbol should be used. A rate of 0.056 would be expressed as 5.6%. Percents/Rates are carried in "CAL" files in fields of up to 30-characters.
-NAMES
+</p>
+<h2 align="center">NAMES</h2>
+
+<p>
 Names are carried in 4 explicitly defined fields:
-1) Last Name is a 200-character field, which is used for a person's last name or is used for the complete name of a non-person entity such as a committee, business, ballot measurer name, etc.
-2) First name is a 45-character field which is used to store a person's first name and any middle name(s) and/or initials. For a person, it's all the names excepting the Last Name or surname.
+</p>
+<p>
+<ol>
+<li><p>Last Name is a 200-character field, which is used for a person's last name or is used for the complete name of a non-person entity such as a committee, business, ballot measurer name, etc.</p></li>
+<li><p>First name is a 45-character field which is used to store a person's first name and any middle name(s) and/or initials. For a person, it's all the names excepting the Last Name or surname.</p>
+<p>
 A Moniker may be included in the first name field. It can be identified
 with surrounding single-quote (') characters. It must not be surrounded
 with double-quote (") characters, because embedded double-quotes (") are
 not allowed within text fields in the CAL format. When displayed or
 printed in CAL-ACCESS, the single-quote characters are shown as double-quotes.
-3) Title (or prefix) is used for titles used by a person such as Mr, Mrs, Ms, Hon, Rep, Sen, Dr, and so on. Up to 10 characters are allowed.
-4) Suffix is used for a person's suffix such as Jr, Sr, II, III, Esquire, etc. As many as 10 characters are allowed.
-  Page 7 of 95
+</p></li>
+<li><p>Title (or prefix) is used for titles used by a person such as Mr, Mrs, Ms, Hon, Rep, Sen, Dr, and so on. Up to 10 characters are allowed.</p></li>
+<li><p>Suffix is used for a person's suffix such as Jr, Sr, II, III, Esquire, etc. As many as 10 characters are allowed.</p></li>
+</ol>
 
-Document Id: CAL format 2.20 Date: 07/01/2016
- ADDRESSES
+<h2 align="center">ADDRESSES</h2>
+<p>
 Addresses must contain a postal "delivery line" (such as a street address or a PO Box), plus city, state code and a 5-digit (or optionally a Zip+4) ZIP Code. In other words, a complete "mailing address" should be given as an "address".
+</p>
+<p>
 "CAL" records allow for 2 lines of address (in addition to the fields for city, state code and ZIP Code). When only one line of street address is given, it should be a postal delivery line and should be coded in the Address1 field (Address2 field should be blank). When two lines of address are given, the postal delivery line should be coded in Address2 (Address1 will contain "non-delivery" information such as a building name, "attention:" etc.).
-Zip Codes & Zip +4
+</p>
+<h2 align="center">Zip Codes & Zip +4</h2>
+<p>
 Zip Codes are defined as a maximum of 10 characters. Zip Codes can be stored as 5- digit, 9-digit, or as 5-digit/hyphen/4-digit values.
-PHONE NUMBERS
+</p>
+<h2 align="center">PHONE NUMBERS</h2>
+<p>
 Phone numbers are coded "freeform" in a 20-character phone field. Any special instructions (e.g. select #3 from the menu) and/or extension numbers should be included in phone number fields.
-YES/NO BOX PAIRS
+</p>
+<h2 align="center">YES/NO BOX PAIRS</h2>
+<p>
 Yes/No Boxes are represented on forms and schedules as two separate boxes. They are mutually exclusive in their use; however, if a filer checks both boxes in a Yes/No group, this should be interpreted the same as if neither box is checked. The results are stored in a single field in the electronic file - the only acceptable values in a Yes/No field are blank, "Y" and "N".
-    Page 8 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
- SINGLE CHECK-BOXES
+</p>
+<h2 align="center">SINGLE CHECK-BOXES</h2>
+<p>
 Check-box fields differ from Yes/No Boxes. Check-boxes reflect either a "positive" response (i.e. the filer has put a check-mark, an "X" or some other kind of marking in the box), or "no response". The lack of a mark in a check-box means only that a "positive" response HAS NOT been made. It does not indicate a "negative" response - the filer might have ignored the check-box on the form.
+</p>
+<p>
 In electronic filing, check-box fields are coded with an "X" to indicate that the item on the form was "checked". Nothing is coded when the item was not "checked".
-CHECK-BOXES GROUPS
-Forms often have groups of check-boxes where only one box can be checked. These are called "mutually exclusive" check-box groups. The convention used in "CAL" files is to define a single field to represent a group of mutually exclusive check-boxes on a paper form. Code values are defined to represent each possible selection
-(e.g. [1|2|3|...] or [A|B|C|...]).
-Note: The convention in MS Windows is to offer mutually exclusive choices with what are called "radio buttons".
-Note: The convention in "CAL" is to define a separate field for each check-box, which is not part of a mutually exclusive group. (see Single Check-boxes above).
-ENTITY CODES USED ON FORMS & SCHEDULES
+</p>
+<h2 align="center">CHECK-BOXES GROUPS</h2>
+<p>
+ Forms often have groups of check-boxes where only one box can be checked. These are called "mutually exclusive" check-box groups. The convention used in "CAL" files is to define a single field to represent a group of mutually exclusive check-boxes on a paper form. Code values are defined to represent each possible selection (e.g. [1|2|3|...] or [A|B|C|...]).
+</p>
+<p>
+<strong>Note:</strong> The convention in MS Windows is to offer mutually exclusive choices with what are called "radio buttons".
+</p>
+<p>
+<strong>Note:</strong> The convention in "CAL" is to define a separate field for each check-box, which is not part of a mutually exclusive group. (see Single Check-boxes above).
+</p>
+<h2 align="center">ENTITY CODES USED ON FORMS & SCHEDULES</h2>
+<p>
 The following Entity Codes are used to indicate various kinds of persons and committees on "Cover Page" (CVR) record types:
-   CAO - CTL - RCP - SMO - BMC - MDI -
-Candidate/Office-holder (F460, F465, F470, F496, F497, F470S) Controlled Committee (F460, F465, F496, F497, F410, F495)
-Recipient Committee (F425, F450, F460, F465, F496, F497, F410, F495) Slate Mailer Organization (F401, F498, F400, F402)
-Ballot Measure Committee (F450, F460, F465, F496, F497, F410, F495) Major Donor/Ind Expenditure (F461, F465, F496, F497)
-Page 9 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
- ENTITY CODES USED ON FORMS & SCHEDULES (continued)
- LBY - FRM - LEM - LCO - IND -
-Lobbyist (an individual) (F606, F607, F615, F645) Lobbying Firm (F601, F602, F603, F625, F645) Lobbying Employer (F601, F602, F603, F635, F645) Lobbying Coalition (F601, F602, F603, F635, F645) Person (spending > $5000) (F645)
+<blockquote>
+CAO - Candidate/Office-holder (F460, F465, F470, F496, F497, F470S)<br/>
+CTL - Controlled Committee (F460, F465, F496, F497, F410, F495)<br/>
+RCP - Recipient Committee (F425, F450, F460, F465, F496, F497, F410, F495)<br/>
+SMO - Slate Mailer Organization (F401, F498, F400, F402)<br/>
+BMC - Ballot Measure Committee (F450, F460, F465, F496, F497, F410, F495)<br/>
+MDI - Major Donor/Ind Expenditure (F461, F465, F496, F497)<br/>
+LBY - Lobbyist (an individual) (F606, F607, F615, F645)<br/>
+FRM - Lobbying Firm (F601, F602, F603, F625, F645)<br/>
+LEM - Lobbying Employer (F601, F602, F603, F635, F645)<br/>
+LCO - Lobbying Coalition (F601, F602, F603, F635, F645)<br/>
+IND - Person (spending > $5000) (F645)
+</blockquote>
+</p>
+<p>
 The following "Entity Codes" are used to indicate various kinds of persons on "Additional Name/Address" CVR2 record types:
-AGY - ATH - ATR - BNM - CAO - COM - CTL - EMP - FRM - MBR - OFF - OWN - POF - PRO - PTN - RCP - SCL - SPO -
-State Agency (F603)
-Authorizing Individual (F400)
-Assistant Treasurer (F410, F425, F450, F460)
-Ballot Measure's Name/Title (F410, F460-Part5a)
-Cand/Officeholder (F410, F460-Part4a, F460-Part5b, F460-Part6, F465) Committee (F400, F460-Part4b, F470-Part4)
-Controlled Committee (F410, F460-Part4b, F470-Part4)
-Employer (F625, F635, F603)
-Lobbying Firm (F603)
-Member of Association (F602)
-Officer (F465-Part5, F625, F635)
-Owner (F625, F635)
-Principal Officer (F400, F410, F465)
-Proponent (F410, F460-Part5b)
-Partner (F625, F635)
-Recipient Committee (F400, F460-Part4b, F470-Part4)
-Subcontracted Client (F602)
-Sponsor (F410)
-Note:
-F460 Part4a/Part4b & Part5a/Part5b refer to the "upper"/"lower" portions of Parts 4 and 5 located on the 460's second cover page.
+<blockquote>
+AGY - State Agency (F603)<br/>
+ATG - Authorizing Individual (F400)<br/>
+ATR - Assistant Treasurer (F410, F425, F450, F460)<br/>
+BNM - allot Measure's Name/Title (F410, F460-Part5a)<br/>
+CAO - Cand/Officeholder (F410, F460-Part4a, F460-Part5b, F460-Part6, F465) Committee (F400, F460-Part4b, F470-Part4)<br/>
+CTL - Controlled Committee (F410, F460-Part4b, F470-Part4)<br/>
+EMP - Employer (F625, F635, F603)<br/>
+FRM - Lobbying Firm (F603)<br/>
+MBR - Member of Association (F602)<br/>
+OFF - Officer (F465-Part5, F625, F635)<br/>
+OWN - Owner (F625, F635)<br/>
+POF - Principal Officer (F400, F410, F465)<br/>
+PRO - Proponent (F410, F460-Part5b)<br/>
+PTN - Partner (F625, F635)<br/>
+RCP - Recipient Committee (F400, F460-Part4b, F470-Part4)<br/>
+SCL - Subcontracted Client (F602)<br/>
+SPO - Sponsor (F410)<br/>
+<strong>Note:</strong> F460 Part4a/Part4b & Part5a/Part5b refer to the "upper"/"lower" portions of Parts 4 and 5 located on the 460's second cover page.
+</blockquote>
+</p>
+<p>
 The following CVR2 "Item Codes" indicate which Section within F400 & F410 reports the Entity is to be listed:
-ATR - POF - CTL - PFC - SPO - SMA -
-(Item_Cd) Assistant Treasurer (F410)
-(Item_Cd) Principal Officer (F400, F410)
-(Item_Cd) Controlled Committee (F410)
-(Item_Cd) Primarily Formed Committee Item (F410) (Item_Cd) Sponsored Committee Itemization (F410) (Item_Cd) Slate Mailer Authorizer (F400)
-Page 10 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
- ENTITY CODES USED ON FORMS & SCHEDULES (continued)
+</blockquote>
+ATR - (Item_Cd) Assistant Treasurer (F410)<br/>
+POF - (Item_Cd) Principal Officer (F400, F410)<br/>
+CTL - (Item_Cd) Controlled Committee (F410)<br/>
+PFC - (Item_Cd) Primarily Formed Committee Item (F410)<br/>
+SPO - (Item_Cd) Sponsored Committee Itemization (F410)<br/>
+SMA - (Item_Cd) Slate Mailer Authorizer (F400)
+</blockquote>
+</p>
+<p>
 The following Entity Codes are used to indicate various kinds of persons on "verification" CVR3 record types:
- TRE - CAO - OFF - PRO - SPO -
-Treasurer/Assistant Treasure Candidate/Office Holder Officer (Responsible) Proponent
-Sponsor
+<blockquote>
+TRE - Treasurer/Assistant Treasure
+CAO - Candidate/Office Holder
+OFF - Officer (Responsible)
+PRO - Proponent
+SPO - Sponsor
+</blockquote>
+</p>
 The following Entity Codes are used to indicate various kinds of persons and organizations on various schedules including RCPT, EXPN, and LOAN record types:
-COM - RCP - IND - OTH - PTY - SCC -
-Committee
-Recipient Committee Individual
-Other
-Political Party
-Small Contributor Committee
-LOBBYING ACTIVITY DESCRIPTION (Lby_Actvty on Lobbyist CVR & LPAY records)
+<blockquote>
+COM - Committee
+RCP - Recipient Committee
+IND - Individual
+OTH - Other
+PTY - Political Party
+SCC - Small Contributor Committee
+</blockquote>
+</p>
+<h2 align="center">LOBBYING ACTIVITY DESCRIPTION (Lby_Actvty on Lobbyist CVR & LPAY records)</h2>
 If additional space is needed to describe this activity, attach a text memo record describing the activity to the filing. When reporting lobbying activity, the preferred format to identify bills is the type of bill followed by the bill number. Each bill is separated by a space character or comma. Putting a white space between the bill type and bill number is optional. Formatting the information in this manner provides the public with better access to bill information. The following variations comply with this definition.
 AB26 AB30, SB300, SB 285 AB 325,SB203, AB 25
 The codes recognized by the system are AB, AC, ACA, ACR, AJR, HR, SB, SCA, SCR, SJR, and SR. In addition, any of these codes followed by an X and a single digit (for example ABx7 or ABx 7) will be recognized.
   Page 11 of 95
 
-Document Id: CAL format 2.20 Date: 07/01/2016
- OFFICE CODES USED ON FORMS & SCHEDULES Statewide Offices
+<h2 align="center">OFFICE CODES USED ON FORMS & SCHEDULES Statewide Offices</h2>
   GOV - LTG - SOS - CON - ATT - TRE - INS - SUP - SPM -
 Governor
 Lieutenant Governor
@@ -264,8 +321,7 @@ Miscellaneous / Other
 OTH - Other
  Page 12 of 95
 
-Document Id: CAL format 2.20 Date: 07/01/2016
- PAYMENT PURPOSE CODES USED FOR “Payments to Influence” schedules
+<h2 align="center">PAYMENT PURPOSE CODES USED FOR “Payments to Influence” schedules</h2>
 The following codes are used in detail records reported on Form 640. The codes are to be included as part of the first six (6) characters of the [RECIP_NAML] field as described on page 82 of this document. Complete definitions of the codes are contained in the California Code of Regulations, Section 18616, amended January 21, 2016. The brief descriptions of the codes are as follows:
 S – Salary and compensation of employees other than lobbyists
 E – Expenses incurred by a lobbyist and paid directly by the filer
@@ -273,7 +329,7 @@ L – Legislative related services performed by a lobbying firm
 C – Consultants and governmental relations...other than a lobbying firm P – Public affairs
 A – Advertising including billboards, print, radio, television, text, email, and other electronic advertising
 R – Research including feasibility studies, analysis, polling, and public opinion V – Lobbying events including planning, rentals, equipment, and transportation O – All other payments not covered by one of the above-listed categories
-EXPENSE CODES USED ON 460 EXPENSE SCHEDULES
+<h2 align="center">EXPENSE CODES USED ON 460 EXPENSE SCHEDULES</h2>
 These 3-character codes have been described by the FPPC for use on F460 / Schedules E, F and G. CALACCESS uses these codes universally on other forms & schedules when Expense Amounts require categorization. ----------------------------------------------------------------------------------
                  CMP - CNS - CTB - CVC - FIL - FND - IND - LEG - LIT - MBR - MTG - OFC - PET - PHO -
 campaign paraphernalia/miscellaneous campaign consultants
@@ -287,10 +343,6 @@ meetings and appearances
 office expenses
 petition circulating
 phone banks
-Page 13 of 95
-
-Document Id: CAL format 2.20
-Date: 07/01/2016
  POL - POS - PRO - PRT - RAD - RFD - SAL - TEL - TRC - TRS - TSF - VOT - WEB -
 polling and survey research
 postage, delivery and messenger services
@@ -305,17 +357,14 @@ staff/spouse travel, lodging and meals
 transfer between committees of the same candidate/sponsor voter registration
 information technology costs (Internet, e-mail)
 Note: For Schedule D "Type of payment", codes "MON, "IKD" and "IND are the only valid codes. IKD and IND require an explanation.
-Page 14 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
- CALACCESS Expense Codes which are not explicitly listed on FPPC forms.
+<h2 align="center">CALACCESS Expense Codes which are not explicitly listed on FPPC forms.</h2>
  MON -
 IKD -
 LON -
 Monetary contribution - this code means that the contribution is specifically a monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
 Non-monetary contribution - this code means that the contribution is specifically a non-monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
 Loan - This is a "generic" code meaning that a F461P5 contribution is a Loan. Other Codes used on F461P5 are 'MON', 'CTB' & 'IND'.
-AMENDMENTS TO FORMS
+<h2 align="center">AMENDMENTS TO FORMS</h2>
  When a filing is received, the CALACCESS system assigns a unique identifier known as the Filing Id. This filing id is printed on the acknowledgement notification that is emailed to you. The id is always preceded by "CA-" (i.e. CA-999999). You will need to use this filing id when amending this form. The id must be entered at the time of uploading your file to our system using the CALOAD utility. This id is entered in the area titled:
 This filing amends filing id: Along with sending us this id through the CALOAD utility, you need to increase the number in the field "Report_Num" found in every CVR record. This number must be increased according to what amendment number you are sending (i.e. 001 = first amendment, 002 = second amendment).
 Note: Your file will be rejected under the following conditions:
@@ -323,22 +372,16 @@ Note: Your file will be rejected under the following conditions:
 • You send the Report_Num out of sequence. (i.e. Report_Num = 003, but we have
 not received 002 yet, or Report_Num = 002, and we already have 002 on file)
 Please view AMENDMENT PROCESSING OF ITEMS IN SCHEDULES found in the next page for additional amendment information.
- Page 15 of 95
-999999
 
-Document Id: CAL format 2.20 Date: 07/01/2016
- AMENDMENT PROCESSING OF ITEMS IN SCHEDULES
+<h2 align="center">AMENDMENT PROCESSING OF ITEMS IN SCHEDULES</h2>
 Tran_ID: A unique identifier permanently associated with each itemization or transaction appearing in a CAL electronic file. If a given itemization appears in more than one schedule (e.g. a forgiven loan is reported on both Schedule A and Schedule B) then the Tran_ID associated with that itemization can either have the same value or different values for that single item among the various schedules. However, all Tran_IDs of itemizations appearing in any amending report must match the Tran_IDs first used for those same itemizations in the original report.
 The Tran_ID assigned and maintained by the filer's software is used by the California SOS's database to uniquely identify each itemization from every schedule and from every filer. It is critically important that when a filer amends a previously filed electronic report, the Tran_IDs of the subsequent amendment match those already reported. It is acceptable for a Tran_ID of one original report to be assigned a value that was used on a previous original report. Tran_IDs must be unique WITHIN a report group - that is an original report and all of its amendments.
 Although software will assign a Tran_ID to a dollar itemization on almost all schedules, this is not so with the 460's Schedule F. "Schedule" F is a series of summarization's - the main entries are summarization's for a payee/creditor. Therefore Tran_IDs on Schedule F will be unique identifiers used for the payee/creditor entity. Sub- itemizations on Schedule F that show new incurred expenses for the reporting period will, however, be assigned Tran_IDs for the individual incurred expense items.
 A unique Tran_ID must also be assigned to each CVR2 and CVR3 record. Since these are not "money" records, the Tran_ID will be a unique identifier that is assigned to the Entity who/which is coded in each CVR2 and CVR3 record.
-MEMOS, NOTES & EXPLANATORY TEXT
+<h2 align="center">MEMOS, NOTES & EXPLANATORY TEXT</h2>
 Large bodies of text can be associated with forms and also with individual itemizations within schedules. A special TEXT record can be used in a CAL file to carry descriptive text as a string of characters not exceeding 4000 characters.
 TEXT records can be associated with a filing's "cover" page, with a schedule as a whole, and to one or more individual itemizations within a schedule.
 The contents of TEXT records are printed on "pages" following the form(s) to which they are related. For example, a body of TEXT related to a cover form will be shown following that form. Likewise, TEXT related to a schedule (as a whole and/or itemizations within that schedule) is printed on pages after the last detailed itemization of the particular schedule. Depending on the amount of "white space" available on a form, the print rendering software in CALACCESS will attempt to "fit" short text memos
-  Page 16 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
  within the immediate proximity of the item to which the memo is attached, otherwise it is printed on separate "pages".
 CAL layouts for Schedules include a field named Memo_RefNo. This is a value assigned by the filer and is printed within the itemization area of the printed schedule as a "reference" to the memo text that is printed after the last detailed itemization in the schedule. Memo_RefNo can be thought of as being like a footnote reference.
 The layout of the TEXT record is described below:
@@ -362,9 +405,6 @@ Values: (F4**, F6**, any schedule name)
 Note: no tab, carriage return, line feed or any other non-printable characters may be embedded within the string of text.
 Examples:
 TEXT,F460,,"Some general notes about this 460 filing are given here." TEXT,A,,"Some general notes about Schedule A in this 460 filing." TEXT,C,123,"A long memo for an item in Schedule C that references Memo 123."
-Page 17 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
  BACK-REFERENCING TO RELATE "CHILD" SUBITEMIZATIONS BACK TO "PARENT" ITEMIZATIONS
 Schedules that can have child records have a new BakRef_TID field are:
   Disclosure Report
@@ -383,9 +423,6 @@ The BakRef_TID of a "sub-itemization" (a "child" record in programmer talk) is u
 A non-blank BakRef_TID both indicates that a record is a "child" record, and also points (refers back) to the main itemization or "parent" record. The value that is coded into the BakRef_TID of a child record is that of the Tran_ID belonging to the parent record.
 The CALACCESS system maintains references so that entities listed in "sub- itemizations" can be located in queries of the CALACCESS database.
 The 460 Schedule G is a special case where ALL entries on that form are really sub- itemizations for items that appear on the 460's Schedule E or Schedule F. Filers have the option of coding Schedule E/F sub-itemizations within Schedules E/F themselves, or separately on Schedule G. CALACCESS will maintain references from child records on Schedule G back to the parent records on Schedule E/F by using Schedule G's BakRef_TIDs (which are required on Sched G). A field called G_From_E_F on the EXPN layout is used for Schedule G "child" records to indicate whether the "parent" record is found on Schedule E or Schedule F.
-Page 18 of 95
-
-Document Id: CAL format 2.20 Date: 07/01/2016
  Programmers should note that "parent" records on the F460's Schedule F are assigned Tran_IDs that are unique for the Payee/Creditor or are unique for the "debt". However, "child" sub-itemizations of new incurred expenses and new payments are assigned Tran_ID's unique to the incurred item. The values in BakRef_TID's in Schedule F need to take this into account.
 Child Records:
   R{x} # C{x}
@@ -414,9 +451,7 @@ Note: A parent RCPT Record could have one or many SPLT records. Here is a little
 1 to many
 RCPT -------------------------> SPLT
 Record Samples RCPT,A,MC5, etc...... (Parent) SPLT,A,MC5, etc...... (Child) SPLT,A,MC5, etc...... (Child)
-Page 19 of 95
 
-Document Id: CAL format 2.20 Date: 07/01/2016
  *******************************************************************************
 Section 1 - Campaign Disclosure Reports
 *******************************************************************************
