@@ -110,7 +110,7 @@ Note:  The following layouts use 'Rx', 'R', 'Cx' & 'C' to indicate if a field is
 <p>
 Header Record Layout (common to all CAL filing types)
 
-<table cellpadding="5">
+<table cellpadding="5" border="1">
 <tr><th>#</th>}<th>R{x}<br/>C{x}</th><th>Field Name</th><th>Max Len</th><th>Description</th></tr>
 <tr><td>01</td><td>Rx</td><td>Rec_Type</td><td>3</td><td>Record Type. Value: HDR</td></tr>
 <tr><td>02</td><td>Rx</td><td>EF_Type</td><td>3</td><td>Electronic Filing Type (a.k.a. Form_Type)</td></tr>
@@ -149,6 +149,7 @@ Examples:
 -567.8 - represents a negative amount of $567.80<br/>
 $1,234.00 - invalid & will be rejected (commas & other symbols not allowed)<br/>
 1234.00- - invalid & will be rejected (no trailing '-' signs allowed)
+</blockquote>
 </p>
 
 <h2 align="center">RATES & PERCENTS</h2>
@@ -253,7 +254,7 @@ SPO - Sponsor (F410)<br/>
 </p>
 <p>
 The following CVR2 "Item Codes" indicate which Section within F400 & F410 reports the Entity is to be listed:
-</blockquote>
+<blockquote>
 ATR - (Item_Cd) Assistant Treasurer (F410)<br/>
 POF - (Item_Cd) Principal Officer (F400, F410)<br/>
 CTL - (Item_Cd) Controlled Committee (F410)<br/>
@@ -283,105 +284,158 @@ SCC - Small Contributor Committee
 </blockquote>
 </p>
 <h2 align="center">LOBBYING ACTIVITY DESCRIPTION (Lby_Actvty on Lobbyist CVR & LPAY records)</h2>
+<p>
 If additional space is needed to describe this activity, attach a text memo record describing the activity to the filing. When reporting lobbying activity, the preferred format to identify bills is the type of bill followed by the bill number. Each bill is separated by a space character or comma. Putting a white space between the bill type and bill number is optional. Formatting the information in this manner provides the public with better access to bill information. The following variations comply with this definition.
-AB26 AB30, SB300, SB 285 AB 325,SB203, AB 25
+<blockquote>AB26 AB30, SB300, SB 285 AB 325,SB203, AB 25</blockquote>
 The codes recognized by the system are AB, AC, ACA, ACR, AJR, HR, SB, SCA, SCR, SJR, and SR. In addition, any of these codes followed by an X and a single digit (for example ABx7 or ABx 7) will be recognized.
-
-<h2 align="center">OFFICE CODES USED ON FORMS & SCHEDULES Statewide Offices</h2>
-  GOV - LTG - SOS - CON - ATT - TRE - INS - SUP - SPM -
-Governor
-Lieutenant Governor
-Secretary of State
-State Controller
-Attorney General
-State Treasurer
-Insurance Commissioner Superintendent of Public Instruction Supreme Court Justice
-State District Offices
- SEN - ASM - BOE - PER - APP -
-State Senator
-State Assembly Person
-Board of Equalization Member
-Public Employees Retirement System State Appellate Court Justice
-City, County and Local Offices
- ASR - BED - BSU - CAT - CCB - CCM - COU - CSU - CTR - DAT - MAY - PDR - PLN - SHC - SCJ - TRS -
-Assessor
-Board of Education
-Board of Supervisors
-City Attorney
-Community College Board City Council Member County Counsel
-County Supervisor
-Local Controller
-District Attorney
-Mayor
-Public Defender
-Planning Commissioner Sheriff-Coroner
-Superior Court Judge Local Treasurer
-Miscellaneous / Other
+</p>
+<h2 align="center">OFFICE CODES USED ON FORMS & SCHEDULES</h2>
+<h3>Statewide Offices</h3>
+<p>
+GOV - Governor<br/>
+LTG - Lieutenant Governor<br/>
+SOS - Secretary of State<br/>
+CON - State Controller<br/>
+ATT - Attorney General<br/>
+TRE - State Treasurer<br/>
+INS - Insurance Commissioner<br/>
+SUP - Superintendent of Public Instruction<br/>
+SPM - Supreme Court Justice
+</p>
+<h3>State District Offices</h3>
+<p>
+SEN - State Senator<br/>
+ASM - State Assembly Person<br/>
+BOE - Board of Equalization Member<br/>
+PER - Public Employees Retirement System<br/>
+APP - State Appellate Court Justice
+<h3>City, County and Local Offices</h3>
+ASR - Assessor<br/>
+BED - Board of Education<br/>
+BSU - Board of Supervisors<br/>
+CAT - City Attorney<br/>
+CCB - Community College Board<br/>
+CCM - City Council Member<br/>
+COU - County Counsel<br/>
+CSU - County Supervisor<br/>
+CTR - Local Controller<br/>
+DAT - District Attorney<br/>
+MAY - Mayor<br/>
+PDR - Public Defender<br/>
+PLN - Planning Commissioner<br/>
+SHC - Sheriff-Coroner<br/>
+SCJ - Superior Court Judge<br/>
+TRS - Local Treasurer
+<h3>Miscellaneous / Other</h3>
 OTH - Other
 
 <h2 align="center">PAYMENT PURPOSE CODES USED FOR “Payments to Influence” schedules</h2>
+<p>
 The following codes are used in detail records reported on Form 640. The codes are to be included as part of the first six (6) characters of the [RECIP_NAML] field as described on page 82 of this document. Complete definitions of the codes are contained in the California Code of Regulations, Section 18616, amended January 21, 2016. The brief descriptions of the codes are as follows:
-S – Salary and compensation of employees other than lobbyists
-E – Expenses incurred by a lobbyist and paid directly by the filer
-L – Legislative related services performed by a lobbying firm
-C – Consultants and governmental relations...other than a lobbying firm P – Public affairs
-A – Advertising including billboards, print, radio, television, text, email, and other electronic advertising
-R – Research including feasibility studies, analysis, polling, and public opinion V – Lobbying events including planning, rentals, equipment, and transportation O – All other payments not covered by one of the above-listed categories
+</p>
+<p>
+S – Salary and compensation of employees other than lobbyists<br/>
+E – Expenses incurred by a lobbyist and paid directly by the filer<br/>
+L – Legislative related services performed by a lobbying firm<br/>
+C – Consultants and governmental relations...other than a lobbying firm<br/>
+P – Public affairs<br/>
+A – Advertising including billboards, print, radio, television, text, email, and other electronic advertising<br/>
+R – Research including feasibility studies, analysis, polling, and public opinion<br/>
+V – Lobbying events including planning, rentals, equipment, and transportation<br/>
+O – All other payments not covered by one of the above-listed categories
+</p>
+
 <h2 align="center">EXPENSE CODES USED ON 460 EXPENSE SCHEDULES</h2>
-These 3-character codes have been described by the FPPC for use on F460 / Schedules E, F and G. CALACCESS uses these codes universally on other forms & schedules when Expense Amounts require categorization. ----------------------------------------------------------------------------------
-                 CMP - CNS - CTB - CVC - FIL - FND - IND - LEG - LIT - MBR - MTG - OFC - PET - PHO -
-campaign paraphernalia/miscellaneous campaign consultants
-contribution (if nonmonetary, explain)* civic donations
-candidate filing/ballot fees
-fundraising events
-independent expenditure supporting/opposing others (explain)* legal defense
-campaign literature and mailings
-member communications
-meetings and appearances
-office expenses
-petition circulating
-phone banks
- POL - POS - PRO - PRT - RAD - RFD - SAL - TEL - TRC - TRS - TSF - VOT - WEB -
-polling and survey research
-postage, delivery and messenger services
-professional services (legal, accounting)
-print ads
-radio airtime and production costs
-returned contributions
-campaign workers salaries
-T.V. or cable airtime and production costs
-candidate travel, lodging and meals
-staff/spouse travel, lodging and meals
-transfer between committees of the same candidate/sponsor voter registration
-information technology costs (Internet, e-mail)
-Note: For Schedule D "Type of payment", codes "MON, "IKD" and "IND are the only valid codes. IKD and IND require an explanation.
+<p>
+These 3-character codes have been described by the FPPC for use on F460 / Schedules E, F and G. CALACCESS uses these codes universally on other forms & schedules when Expense Amounts require categorization.
+</p>
+CMP - campaign paraphernalia/miscellaneous<br/>
+CNS - campaign consultants<br/>
+CTB - contribution (if nonmonetary, explain)*<br/>
+CVC - civic donations<br/>
+FIL - candidate filing/ballot fees<br/>
+FND - fundraising events<br/>
+IND - independent expenditure supporting/opposing others (explain)*<br/>
+LEG - legal defense<br/>
+LIT - campaign literature and mailings<br/>
+MBR - member communications<br/>
+MTG - meetings and appearances<br/>
+OFC - office expenses<br/>
+PET - petition circulating<br/>
+PHO - phone banks<br/>
+POL - polling and survey research<br/>
+POS - postage, delivery and messenger services<br/>
+PRO - professional services (legal, accounting)<br/>
+PRT - print ads<br/>
+RAD - radio airtime and production costs<br/>
+RFD - returned contributions<br/>
+SAL - campaign workers salaries<br/>
+TEL - T.V. or cable airtime and production costs<br/>
+TRC - candidate travel, lodging and meals<br/>
+TRS - staff/spouse travel, lodging and meals<br/>
+TSF - transfer between committees of the same candidate/sponsor<br/>
+VOT - voter registration<br/>
+WEB - information technology costs (Internet, e-mail)<br/>
+<strong>Note:</strong> For Schedule D "Type of payment", codes "MON, "IKD" and "IND are the only valid codes. IKD and IND require an explanation.
+</p>
 <h2 align="center">CALACCESS Expense Codes which are not explicitly listed on FPPC forms.</h2>
- MON -
-IKD -
-LON -
-Monetary contribution - this code means that the contribution is specifically a monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
-Non-monetary contribution - this code means that the contribution is specifically a non-monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
-Loan - This is a "generic" code meaning that a F461P5 contribution is a Loan. Other Codes used on F461P5 are 'MON', 'CTB' & 'IND'.
+<p>
+MON - Monetary contribution - this code means that the contribution is specifically a monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
+</p>
+<p>
+IKD - Non-monetary contribution - this code means that the contribution is specifically a non-monetary contribution. It is not an allowable value for Schedules E, F & G on F460 filings. It can be coded as a value on Schedule D, and on the F450P5, F461P5 and F465P3 schedules.
+</p>
+<p>
+LON - Loan - This is a "generic" code meaning that a F461P5 contribution is a Loan. Other Codes used on F461P5 are 'MON', 'CTB' & 'IND'.
+</p>
 <h2 align="center">AMENDMENTS TO FORMS</h2>
+<p>
  When a filing is received, the CALACCESS system assigns a unique identifier known as the Filing Id. This filing id is printed on the acknowledgement notification that is emailed to you. The id is always preceded by "CA-" (i.e. CA-999999). You will need to use this filing id when amending this form. The id must be entered at the time of uploading your file to our system using the CALOAD utility. This id is entered in the area titled:
-This filing amends filing id: Along with sending us this id through the CALOAD utility, you need to increase the number in the field "Report_Num" found in every CVR record. This number must be increased according to what amendment number you are sending (i.e. 001 = first amendment, 002 = second amendment).
-Note: Your file will be rejected under the following conditions:
-• You failed to provided a Filing Id, and Report_Num is greater than zero.
-• You send the Report_Num out of sequence. (i.e. Report_Num = 003, but we have
-not received 002 yet, or Report_Num = 002, and we already have 002 on file)
+<blockquote><strong>
+This filing amends filing id: [__________]
+</strong></blockquote>
+Along with sending us this id through the CALOAD utility, you need to increase the number in the field "Report_Num" found in every CVR record. This number must be increased according to what amendment number you are sending (i.e. 001 = first amendment, 002 = second amendment).
+</p>
+<p>
+<strong>Note:</strong> Your file will be rejected under the following conditions:
+<ul>
+<li>You failed to provided a Filing Id, and Report_Num is greater than zero.</li>
+<li>You send the Report_Num out of sequence. (i.e. Report_Num = 003, but we have
+not received 002 yet, or Report_Num = 002, and we already have 002 on file)</li>
+</ul>
+<p><strong>
 Please view AMENDMENT PROCESSING OF ITEMS IN SCHEDULES found in the next page for additional amendment information.
+</strong></p>
 
 <h2 align="center">AMENDMENT PROCESSING OF ITEMS IN SCHEDULES</h2>
+Mp>
 Tran_ID: A unique identifier permanently associated with each itemization or transaction appearing in a CAL electronic file. If a given itemization appears in more than one schedule (e.g. a forgiven loan is reported on both Schedule A and Schedule B) then the Tran_ID associated with that itemization can either have the same value or different values for that single item among the various schedules. However, all Tran_IDs of itemizations appearing in any amending report must match the Tran_IDs first used for those same itemizations in the original report.
+</p>
+<p>
 The Tran_ID assigned and maintained by the filer's software is used by the California SOS's database to uniquely identify each itemization from every schedule and from every filer. It is critically important that when a filer amends a previously filed electronic report, the Tran_IDs of the subsequent amendment match those already reported. It is acceptable for a Tran_ID of one original report to be assigned a value that was used on a previous original report. Tran_IDs must be unique WITHIN a report group - that is an original report and all of its amendments.
+</p>
+<p>
 Although software will assign a Tran_ID to a dollar itemization on almost all schedules, this is not so with the 460's Schedule F. "Schedule" F is a series of summarization's - the main entries are summarization's for a payee/creditor. Therefore Tran_IDs on Schedule F will be unique identifiers used for the payee/creditor entity. Sub- itemizations on Schedule F that show new incurred expenses for the reporting period will, however, be assigned Tran_IDs for the individual incurred expense items.
+</p>
+<p>
 A unique Tran_ID must also be assigned to each CVR2 and CVR3 record. Since these are not "money" records, the Tran_ID will be a unique identifier that is assigned to the Entity who/which is coded in each CVR2 and CVR3 record.
+</p>
 <h2 align="center">MEMOS, NOTES & EXPLANATORY TEXT</h2>
+<p>
 Large bodies of text can be associated with forms and also with individual itemizations within schedules. A special TEXT record can be used in a CAL file to carry descriptive text as a string of characters not exceeding 4000 characters.
+</p>
+<p>
 TEXT records can be associated with a filing's "cover" page, with a schedule as a whole, and to one or more individual itemizations within a schedule.
+</p>
+<p>
 The contents of TEXT records are printed on "pages" following the form(s) to which they are related. For example, a body of TEXT related to a cover form will be shown following that form. Likewise, TEXT related to a schedule (as a whole and/or itemizations within that schedule) is printed on pages after the last detailed itemization of the particular schedule. Depending on the amount of "white space" available on a form, the print rendering software in CALACCESS will attempt to "fit" short text memos
  within the immediate proximity of the item to which the memo is attached, otherwise it is printed on separate "pages".
+</p>
+<p>
 CAL layouts for Schedules include a field named Memo_RefNo. This is a value assigned by the filer and is printed within the itemization area of the printed schedule as a "reference" to the memo text that is printed after the last detailed itemization in the schedule. Memo_RefNo can be thought of as being like a footnote reference.
+</p>
+<p>
+TABLE_NEEDED
 The layout of the TEXT record is described below:
  R{x} # C{x}
 --- ----
@@ -400,9 +454,18 @@ Len Description
 Values: (F4**, F6**, any schedule name)
 20 The value contained in a schedule itemization's 'Memo_RefNo' field.
 4000 A string of unformatted text up to 4000 characters.
+</p>
+<p>
 Note: no tab, carriage return, line feed or any other non-printable characters may be embedded within the string of text.
+</p>
+<p>
 Examples:
-TEXT,F460,,"Some general notes about this 460 filing are given here." TEXT,A,,"Some general notes about Schedule A in this 460 filing." TEXT,C,123,"A long memo for an item in Schedule C that references Memo 123."
+<blockquote><pre>
+TEXT,F460,,"Some general notes about this 460 filing are given here."
+TEXT,A,,"Some general notes about Schedule A in this 460 filing."
+TEXT,C,123,"A long memo for an item in Schedule C that references Memo 123."
+</pre></blockquote>
+</p>
 <h2 align="center">BACK-REFERENCING TO RELATE "CHILD" SUBITEMIZATIONS BACK TO "PARENT" ITEMIZATIONS</h2>
 Schedules that can have child records have a new BakRef_TID field are:
   Disclosure Report
@@ -417,11 +480,23 @@ S401 RCPT EXPN LOAN DEBT
 Lobbyist Payments Received: Lobbyist Payments Made: Lobbyist Pol Contribs Made:
 615/P1; 625/P3-A; LEXP 635/P3-C; 645/P2
 625/P2 LPAY 635/P3-B LPAY 615/P2; 625/P4-B; LCCM 635/P4-B; 645/P3-B
+<p>
 The BakRef_TID of a "sub-itemization" (a "child" record in programmer talk) is used to "refer back" to the main itemization record in a schedule. A sub-itemization (like a "memo" record where Memo_Code=X) does not count toward any schedule or summary page dollar totals. It is an informational record.
+</p>
+<p>
 A non-blank BakRef_TID both indicates that a record is a "child" record, and also points (refers back) to the main itemization or "parent" record. The value that is coded into the BakRef_TID of a child record is that of the Tran_ID belonging to the parent record.
+</p>
+<p>
 The CALACCESS system maintains references so that entities listed in "sub- itemizations" can be located in queries of the CALACCESS database.
+</p>
+<p>
 The 460 Schedule G is a special case where ALL entries on that form are really sub- itemizations for items that appear on the 460's Schedule E or Schedule F. Filers have the option of coding Schedule E/F sub-itemizations within Schedules E/F themselves, or separately on Schedule G. CALACCESS will maintain references from child records on Schedule G back to the parent records on Schedule E/F by using Schedule G's BakRef_TIDs (which are required on Sched G). A field called G_From_E_F on the EXPN layout is used for Schedule G "child" records to indicate whether the "parent" record is found on Schedule E or Schedule F.
+</p>
+<p>
  Programmers should note that "parent" records on the F460's Schedule F are assigned Tran_IDs that are unique for the Payee/Creditor or are unique for the "debt". However, "child" sub-itemizations of new incurred expenses and new payments are assigned Tran_ID's unique to the incurred item. The values in BakRef_TID's in Schedule F need to take this into account.
+</p>
+
+<p>TABLE_NEEDED
 Child Records:
   R{x} # C{x}
 --- ----
@@ -445,11 +520,14 @@ Values: A, B1, B2, C, D, H, F450P5.
 8 Date of Election
 12 Per Election to Date Amount
 2 Per Election to Date Code. Values: P, G, S, R. (P = Primary, G = General, S = Special, R = Runoff)
+</p>
+<p>
 Note: A parent RCPT Record could have one or many SPLT records. Here is a little sample of some ways the child split record may be used:
 1 to many
 RCPT -------------------------> SPLT
 Record Samples RCPT,A,MC5, etc...... (Parent) SPLT,A,MC5, etc...... (Child) SPLT,A,MC5, etc...... (Child)
-
+</p>
+<pre>
  *******************************************************************************
 Section 1 - Campaign Disclosure Reports
 *******************************************************************************
@@ -466,6 +544,7 @@ Campaign Statement
 497 Late Contribution Report
 498 Slate Mailer Late Payment Report
 *******************************************************************************
+</pre>
  RecType
 <h2 align="center">Electronic File Components by Filing Type</h2>
 FormName Description
